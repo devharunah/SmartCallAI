@@ -10,6 +10,9 @@ export const CATEGORIES = [
 
 export type Category = (typeof CATEGORIES)[number];
 
+// Below this, the customer is asked to confirm/clarify instead of being auto-routed silently.
+export const CONFIDENCE_THRESHOLD = 70;
+
 export interface Agent {
   id: string;
   name: string;
