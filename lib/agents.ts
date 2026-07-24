@@ -51,3 +51,34 @@ export async function setAgentAvailability(id: string, available: boolean): Prom
   if (error) throw error;
   return toAgent(data as AgentRow);
 }
+
+export interface AgentInput {
+  name: string;
+  phone: string;
+  department: Category;
+  categories: Category[];
+  available: boolean;
+}
+
+export async function createAgent(input: AgentInput): Promise<Agent> {
+  const { data, error } = await supabase.from("agents").insert(input).select().single();
+  if (error) throw error;
+  return toAgent(data as AgentRow);
+}
+
+export async function updateAgent(id: string, input: Partial<AgentInput>): Promise<Agent> {
+  const { data, error } = await supabase
+    .from("agents")
+    .update(input)
+    .eq("id", id)
+    .select()
+    .single();
+
+  if (error) throw error;
+  return toAgent(data as AgentRow);
+}
+
+export async function deleteAgent(id: string): Promise<void> {
+  const { error } = await supabase.from("agents").delete().eq("id", id);
+  if (error) throw error;
+}
