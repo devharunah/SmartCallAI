@@ -61,6 +61,8 @@ Return JSON only, matching this shape exactly:
   "reason": ""
 }
 
+"confidence" MUST be an integer from 0 to 100 (a percentage, e.g. 92) — never a decimal fraction like 0.92.
+
 Possible categories (use exactly one, spelled exactly as shown):
 Billing
 Technical Support
@@ -92,7 +94,14 @@ async function openaiClassifier(transcript: string): Promise<ClassificationResul
     throw new Error(`OpenAI returned an unknown category: ${parsed.category}`);
   }
 
-  return parsed;
+  // Models occasionally return confidence as a 0-1 fraction despite the prompt
+  // asking for 0-100; normalize defensively rather than trusting formatting.
+  const confidence =
+    parsed.confidence > 0 && parsed.confidence <= 1
+      ? Math.round(parsed.confidence * 100)
+      : Math.round(parsed.confidence);
+
+  return { ...parsed, confidence };
 }
 
 export async function classifyIssue(transcript: string): Promise<ClassificationResult> {

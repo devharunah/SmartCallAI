@@ -1,4 +1,4 @@
--- SmartCall AI schema. Run this in the Supabase SQL editor (or push via Supabase MCP/CLI).
+-- SmartCall AI: initial schema (agents, calls) + seed data.
 
 create table if not exists agents (
   id uuid primary key default gen_random_uuid(),
@@ -30,5 +30,6 @@ insert into agents (name, phone, department, categories, available) values
   ('Ama', '0705234567', 'Sales', array['Sales'], true),
   ('David', '0706234567', 'Insurance', array['Insurance'], true),
   ('Linda', '0707234567', 'Loans', array['Loans'], true),
-  ('Peter', '0708234567', 'Card Support', array['Card Support'], true)
+  ('Peter', '0708234567', 'Card Support', array['Card Support'], true),
+  ('Emma', '0709234567', 'General Inquiry', array['General Inquiry'], true)
 on conflict do nothing;

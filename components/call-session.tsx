@@ -4,9 +4,17 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import type { RouteCallResponse } from "@/lib/types";
+import { CONFIDENCE_THRESHOLD, type RouteCallResponse } from "@/lib/types";
 
-type Stage = "idle" | "listening" | "processing" | "result" | "connecting" | "error";
+type Stage =
+  | "idle"
+  | "listening"
+  | "processing"
+  | "clarify"
+  | "refine"
+  | "result"
+  | "connecting"
+  | "error";
 
 export function CallSession() {
   const [stage, setStage] = useState<Stage>("idle");
@@ -17,6 +25,8 @@ export function CallSession() {
   const [speechSupported, setSpeechSupported] = useState(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [result, setResult] = useState<RouteCallResponse | null>(null);
+  const [lastTranscript, setLastTranscript] = useState("");
+  const [refineText, setRefineText] = useState("");
 
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
 
@@ -27,6 +37,7 @@ export function CallSession() {
         : undefined;
 
     if (!SpeechRecognitionCtor) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- feature detection on mount
       setSpeechSupported(false);
       setShowFallback(true);
       return;
@@ -78,25 +89,28 @@ export function CallSession() {
     }
   }, []);
 
-  const submitTranscript = useCallback(async (transcript: string) => {
+  const submitTranscript = useCallback(async (transcript: string, forceCategory?: string) => {
     if (!transcript.trim()) return;
 
     recognitionRef.current?.stop();
     setStage("processing");
     setErrorMessage(null);
+    setLastTranscript(transcript);
 
     try {
       const res = await fetch("/api/route-call", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ transcript }),
+        body: JSON.stringify({ transcript, forceCategory }),
       });
 
       if (!res.ok) throw new Error("Routing request failed");
 
       const data: RouteCallResponse = await res.json();
       setResult(data);
-      setStage("result");
+      // Forced routing (the "connect me to someone general" escape hatch) always
+      // goes straight to the result — only a fresh AI guess gets double-checked.
+      setStage(!forceCategory && data.confidence < CONFIDENCE_THRESHOLD ? "clarify" : "result");
     } catch {
       setErrorMessage("Something went wrong reaching the routing service. Please try again.");
       setStage("error");
@@ -107,11 +121,22 @@ export function CallSession() {
     setStage("connecting");
   }, []);
 
+  const goToRefine = useCallback(() => {
+    setRefineText(lastTranscript);
+    setStage("refine");
+  }, [lastTranscript]);
+
+  const escalateToGeneral = useCallback(() => {
+    submitTranscript(lastTranscript, "General Inquiry");
+  }, [lastTranscript, submitTranscript]);
+
   const reset = useCallback(() => {
     setStage("idle");
     setFinalTranscript("");
     setInterimTranscript("");
     setManualText("");
+    setRefineText("");
+    setLastTranscript("");
     setResult(null);
     setErrorMessage(null);
   }, []);
@@ -184,6 +209,56 @@ export function CallSession() {
           <CardContent className="flex flex-col items-center gap-4 py-12">
             <span className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
             <p className="text-sm text-muted-foreground">Analyzing your request...</p>
+          </CardContent>
+        </Card>
+      )}
+
+      {stage === "clarify" && result && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Just to make sure we got that right...</CardTitle>
+          </CardHeader>
+          <CardContent className="flex flex-col gap-4">
+            <p className="text-sm">
+              It sounds like this might be about{" "}
+              <span className="font-medium">{result.category}</span>, but we&apos;re only{" "}
+              {result.confidence}% sure. Did we understand you correctly?
+            </p>
+            <div className="flex flex-col gap-2 sm:flex-row">
+              <Button onClick={() => setStage("result")}>Yes, that&apos;s right</Button>
+              <Button variant="outline" onClick={goToRefine}>
+                No, let me add more detail
+              </Button>
+              <Button variant="secondary" onClick={escalateToGeneral}>
+                Just connect me to someone who can help
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {stage === "refine" && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Tell us a bit more</CardTitle>
+          </CardHeader>
+          <CardContent className="flex flex-col gap-4">
+            <textarea
+              className="min-h-24 w-full rounded-md border bg-background p-2 text-sm"
+              value={refineText}
+              onChange={(e) => setRefineText(e.target.value)}
+            />
+            <div className="flex flex-col gap-2 sm:flex-row">
+              <Button onClick={() => submitTranscript(refineText)} disabled={!refineText.trim()}>
+                Submit
+              </Button>
+              <Button variant="secondary" onClick={escalateToGeneral}>
+                Just connect me to someone who can help
+              </Button>
+              <Button variant="outline" onClick={reset}>
+                Cancel
+              </Button>
+            </div>
           </CardContent>
         </Card>
       )}
