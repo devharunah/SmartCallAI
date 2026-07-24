@@ -37,6 +37,7 @@ export function CallSession() {
         : undefined;
 
     if (!SpeechRecognitionCtor) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- feature detection on mount
       setSpeechSupported(false);
       setShowFallback(true);
       return;
