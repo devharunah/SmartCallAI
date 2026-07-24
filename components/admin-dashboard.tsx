@@ -38,6 +38,7 @@ export function AdminDashboard() {
   const [loading, setLoading] = useState(true);
   const [creating, setCreating] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [confirmingDeleteId, setConfirmingDeleteId] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     const res = await fetch("/api/agents");
@@ -103,8 +104,8 @@ export function AdminDashboard() {
 
   const removeAgent = useCallback(
     async (id: string) => {
-      if (!confirm("Remove this agent?")) return;
       const res = await fetch(`/api/agents/${id}`, { method: "DELETE" });
+      setConfirmingDeleteId(null);
       if (res.ok) await load();
     },
     [load]
@@ -198,14 +199,36 @@ export function AdminDashboard() {
                       />
                     </TableCell>
                     <TableCell className="text-right">
-                      <div className="flex justify-end gap-2">
-                        <Button variant="outline" size="sm" onClick={() => setEditingId(agent.id)}>
-                          Edit
-                        </Button>
-                        <Button variant="ghost" size="sm" onClick={() => removeAgent(agent.id)}>
-                          Delete
-                        </Button>
-                      </div>
+                      {confirmingDeleteId === agent.id ? (
+                        <div className="flex justify-end gap-2">
+                          <span className="self-center text-xs text-muted-foreground">
+                            Remove {agent.name}?
+                          </span>
+                          <Button variant="destructive" size="sm" onClick={() => removeAgent(agent.id)}>
+                            Confirm
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => setConfirmingDeleteId(null)}
+                          >
+                            Cancel
+                          </Button>
+                        </div>
+                      ) : (
+                        <div className="flex justify-end gap-2">
+                          <Button variant="outline" size="sm" onClick={() => setEditingId(agent.id)}>
+                            Edit
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => setConfirmingDeleteId(agent.id)}
+                          >
+                            Delete
+                          </Button>
+                        </div>
+                      )}
                     </TableCell>
                   </TableRow>
                 )
