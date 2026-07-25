@@ -115,9 +115,9 @@ export function AdminDashboard() {
   return (
     <div className="mx-auto flex max-w-4xl flex-col gap-6 px-6 py-12">
       <div className="flex items-center justify-between">
-        <h1 className="text-xl font-semibold">Agents</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">Agents</h1>
         {!creating && (
-          <Button size="sm" onClick={() => setCreating(true)}>
+          <Button variant="accent" size="sm" onClick={() => setCreating(true)}>
             Add Agent
           </Button>
         )}
@@ -189,7 +189,10 @@ export function AdminDashboard() {
                     </TableCell>
                     <TableCell>{agent.phone}</TableCell>
                     <TableCell>
-                      <Badge variant={agent.available ? "default" : "secondary"}>
+                      <Badge
+                        className={agent.available ? "bg-accent text-accent-foreground" : undefined}
+                        variant={agent.available ? "default" : "secondary"}
+                      >
                         {agent.available ? "Available" : "Busy"}
                       </Badge>
                     </TableCell>

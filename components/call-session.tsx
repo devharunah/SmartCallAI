@@ -146,10 +146,15 @@ export function CallSession() {
       {stage === "idle" && (
         <Card>
           <CardHeader>
-            <CardTitle>Hello. Please tell us how we can help today.</CardTitle>
+            <CardTitle className="text-2xl">Hello. Please tell us how we can help today.</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-4">
-            <Button size="lg" onClick={startListening} disabled={!speechSupported && !showFallback}>
+            <Button
+              variant="accent"
+              size="lg"
+              onClick={startListening}
+              disabled={!speechSupported && !showFallback}
+            >
               Start Call
             </Button>
             {(showFallback || !speechSupported) && (
@@ -177,17 +182,17 @@ export function CallSession() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <span className="h-2.5 w-2.5 animate-pulse rounded-full bg-red-500" />
+              <span className="h-2.5 w-2.5 animate-pulse rounded-full bg-destructive" />
               Listening...
             </CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-4">
-            <p className="min-h-16 rounded-md border bg-muted/30 p-3 text-sm">
+            <p className="min-h-16 rounded-md border border-border bg-muted p-3 text-sm">
               {finalTranscript}
               <span className="text-muted-foreground italic"> {interimTranscript}</span>
             </p>
             <div className="flex gap-2">
-              <Button onClick={() => submitTranscript(finalTranscript || interimTranscript)}>
+              <Button variant="accent" onClick={() => submitTranscript(finalTranscript || interimTranscript)}>
                 Done
               </Button>
               <Button variant="outline" onClick={reset}>
@@ -207,7 +212,7 @@ export function CallSession() {
       {stage === "processing" && (
         <Card>
           <CardContent className="flex flex-col items-center gap-4 py-12">
-            <span className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+            <span className="h-8 w-8 animate-spin rounded-full border-2 border-accent border-t-transparent" />
             <p className="text-sm text-muted-foreground">Analyzing your request...</p>
           </CardContent>
         </Card>
@@ -225,7 +230,9 @@ export function CallSession() {
               {result.confidence}% sure. Did we understand you correctly?
             </p>
             <div className="flex flex-col gap-2 sm:flex-row">
-              <Button onClick={() => setStage("result")}>Yes, that&apos;s right</Button>
+              <Button variant="accent" onClick={() => setStage("result")}>
+                Yes, that&apos;s right
+              </Button>
               <Button variant="outline" onClick={goToRefine}>
                 No, let me add more detail
               </Button>
@@ -244,12 +251,16 @@ export function CallSession() {
           </CardHeader>
           <CardContent className="flex flex-col gap-4">
             <textarea
-              className="min-h-24 w-full rounded-md border bg-background p-2 text-sm"
+              className="min-h-24 w-full rounded-md border border-border bg-background p-3 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
               value={refineText}
               onChange={(e) => setRefineText(e.target.value)}
             />
             <div className="flex flex-col gap-2 sm:flex-row">
-              <Button onClick={() => submitTranscript(refineText)} disabled={!refineText.trim()}>
+              <Button
+                variant="accent"
+                onClick={() => submitTranscript(refineText)}
+                disabled={!refineText.trim()}
+              >
                 Submit
               </Button>
               <Button variant="secondary" onClick={escalateToGeneral}>
@@ -270,7 +281,7 @@ export function CallSession() {
           </CardHeader>
           <CardContent className="flex flex-col gap-4">
             <div className="flex items-center justify-between">
-              <Badge>{result.category}</Badge>
+              <Badge className="bg-accent text-accent-foreground">{result.category}</Badge>
               <span className="text-sm text-muted-foreground">
                 Confidence: {result.confidence}%
               </span>
@@ -279,7 +290,7 @@ export function CallSession() {
             <p className="text-sm text-muted-foreground">{result.reason}</p>
 
             {result.queued ? (
-              <p className="rounded-md border bg-muted/30 p-3 text-sm">
+              <p className="rounded-md border border-border bg-muted p-3 text-sm">
                 All {result.category} agents are currently busy. You are next in the queue.
               </p>
             ) : (
@@ -289,7 +300,7 @@ export function CallSession() {
             )}
 
             <div className="flex gap-2">
-              <Button onClick={proceedToConnecting}>
+              <Button variant="accent" onClick={proceedToConnecting}>
                 {result.queued ? "Continue" : `Connect to ${result.agent?.name}`}
               </Button>
               <Button variant="outline" onClick={reset}>
@@ -330,10 +341,10 @@ function ManualInput({
   note?: string;
 }) {
   return (
-    <div className="flex flex-col gap-2 border-t pt-4">
+    <div className="flex flex-col gap-2 border-t border-border pt-4">
       {note && <p className="text-xs text-muted-foreground">{note}</p>}
       <textarea
-        className="min-h-20 w-full rounded-md border bg-background p-2 text-sm"
+        className="min-h-20 w-full rounded-md border border-border bg-background p-3 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
         placeholder="Type your issue here..."
         value={value}
         onChange={(e) => onChange(e.target.value)}
@@ -363,11 +374,11 @@ function ConnectingScreen({
     <Card>
       <CardContent className="flex flex-col items-center gap-4 py-12">
         {connected ? (
-          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-green-500 text-white">
+          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-accent text-accent-foreground">
             ✓
           </span>
         ) : (
-          <span className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+          <span className="h-8 w-8 animate-spin rounded-full border-2 border-accent border-t-transparent" />
         )}
         <p className="text-sm text-muted-foreground">
           {connected
