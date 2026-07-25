@@ -25,7 +25,7 @@ import {
 } from "@/components/ui/table";
 import type { Analytics } from "@/lib/calls";
 
-const COLORS = ["#6366f1", "#22c55e", "#f59e0b", "#ef4444", "#0ea5e9", "#a855f7", "#14b8a6"];
+const COLORS = ["#00d4a4", "#3772cf", "#f55a3c", "#c37d0d", "#1ba673", "#888888", "#00b48a"];
 
 export function AnalyticsDashboard() {
   const [data, setData] = useState<Analytics | null>(null);
@@ -53,7 +53,7 @@ export function AnalyticsDashboard() {
   return (
     <div className="mx-auto flex max-w-5xl flex-col gap-6 px-6 py-12">
       <div className="flex items-center justify-between">
-        <h1 className="text-xl font-semibold">Analytics</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">Analytics</h1>
         <Button variant="outline" size="sm" onClick={load}>
           Refresh
         </Button>
@@ -110,7 +110,7 @@ export function AnalyticsDashboard() {
                   <XAxis dataKey="category" tick={{ fontSize: 11 }} interval={0} angle={-20} textAnchor="end" height={60} />
                   <YAxis allowDecimals={false} />
                   <Tooltip />
-                  <Bar dataKey="count" fill="#6366f1" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="count" fill="#00d4a4" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             )}
@@ -162,8 +162,8 @@ function StatCard({ label, value }: { label: string; value: string | number }) {
   return (
     <Card>
       <CardContent className="flex flex-col gap-1 py-4">
-        <span className="text-xs text-muted-foreground">{label}</span>
-        <span className="text-2xl font-semibold">{value}</span>
+        <span className="text-xs font-medium tracking-wide text-muted-foreground uppercase">{label}</span>
+        <span className="text-2xl font-semibold tracking-tight">{value}</span>
       </CardContent>
     </Card>
   );
