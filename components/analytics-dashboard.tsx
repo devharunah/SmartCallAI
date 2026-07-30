@@ -34,6 +34,14 @@ export function AnalyticsDashboard() {
   const load = useCallback(async () => {
     setLoading(true);
     const res = await fetch("/api/analytics");
+    if (res.status === 401) {
+      window.location.href = "/login?next=/analytics";
+      return;
+    }
+    if (!res.ok) {
+      setLoading(false);
+      return;
+    }
     const json: Analytics = await res.json();
     setData(json);
     setLoading(false);

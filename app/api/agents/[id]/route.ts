@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { deleteAgent, updateAgent, type AgentInput } from "@/lib/agents";
+import { requireApiUser } from "@/lib/auth";
 import { CATEGORIES, type Category } from "@/lib/types";
 
 function isCategory(value: unknown): value is Category {
@@ -7,6 +8,9 @@ function isCategory(value: unknown): value is Category {
 }
 
 export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
+  const { unauthorized } = await requireApiUser();
+  if (unauthorized) return unauthorized;
+
   const { id } = await params;
 
   let body: Record<string, unknown>;
@@ -65,6 +69,9 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
 }
 
 export async function DELETE(_request: Request, { params }: { params: Promise<{ id: string }> }) {
+  const { unauthorized } = await requireApiUser();
+  if (unauthorized) return unauthorized;
+
   const { id } = await params;
   await deleteAgent(id);
   return NextResponse.json({ ok: true });

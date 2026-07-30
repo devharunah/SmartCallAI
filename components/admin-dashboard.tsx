@@ -42,6 +42,14 @@ export function AdminDashboard() {
 
   const load = useCallback(async () => {
     const res = await fetch("/api/agents");
+    if (res.status === 401) {
+      window.location.href = "/login?next=/admin";
+      return;
+    }
+    if (!res.ok) {
+      setLoading(false);
+      return;
+    }
     const data: Agent[] = await res.json();
     setAgents(data);
     setLoading(false);

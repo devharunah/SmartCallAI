@@ -1,17 +1,14 @@
-"use client";
-
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { cn } from "@/lib/utils";
+import { signOut } from "@/app/auth/actions";
+import { NavLinks } from "@/components/nav-links";
+import { Button } from "@/components/ui/button";
+import { getClaims } from "@/lib/auth";
 
-const LINKS = [
-  { href: "/", label: "Call" },
-  { href: "/admin", label: "Admin" },
-  { href: "/analytics", label: "Analytics" },
-];
-
-export function NavHeader() {
-  const pathname = usePathname();
+// An async server component: the signed-in email is in the initial HTML, so the
+// header never flickers from "Sign in" to the user's address after hydration.
+// Only the pathname-aware pill nav needs to be a client component.
+export async function NavHeader() {
+  const claims = await getClaims();
 
   return (
     <header className="border-b border-border bg-background">
@@ -27,22 +24,25 @@ export function NavHeader() {
           </span>
           <span className="font-semibold tracking-tight">SmartCall AI</span>
         </Link>
-        <nav className="flex items-center gap-1 rounded-full border border-border bg-background p-1">
-          {LINKS.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={cn(
-                "rounded-full px-3.5 py-1.5 text-sm font-medium transition-colors",
-                pathname === link.href
-                  ? "bg-primary text-primary-foreground"
-                  : "text-muted-foreground hover:text-foreground"
-              )}
-            >
-              {link.label}
-            </Link>
-          ))}
-        </nav>
+        <div className="flex items-center gap-3">
+          <NavLinks />
+          {claims ? (
+            <div className="flex items-center gap-2">
+              <span className="hidden text-sm text-muted-foreground sm:inline">
+                {claims.email}
+              </span>
+              <form action={signOut}>
+                <Button type="submit" variant="outline" size="sm">
+                  Sign out
+                </Button>
+              </form>
+            </div>
+          ) : (
+            <Button variant="accent" size="sm" asChild>
+              <Link href="/login">Sign in</Link>
+            </Button>
+          )}
+        </div>
       </div>
     </header>
   );

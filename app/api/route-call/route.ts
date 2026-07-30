@@ -4,6 +4,8 @@ import { findAvailableAgent, setAgentAvailability } from "@/lib/agents";
 import { recordCall } from "@/lib/calls";
 import { CATEGORIES, type Category, type ClassificationResult, type RouteCallResponse } from "@/lib/types";
 
+// PUBLIC: the customer call screen posts here unauthenticated. Do not add
+// requireApiUser() to this handler.
 export async function POST(request: Request) {
   const start = Date.now();
 
