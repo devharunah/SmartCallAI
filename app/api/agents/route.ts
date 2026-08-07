@@ -1,8 +1,12 @@
 import { NextResponse } from "next/server";
 import { createAgent, listAgents } from "@/lib/agents";
+import { requireApiUser } from "@/lib/auth";
 import { CATEGORIES, type Category } from "@/lib/types";
 
 export async function GET() {
+  const { unauthorized } = await requireApiUser();
+  if (unauthorized) return unauthorized;
+
   const agents = await listAgents();
   return NextResponse.json(agents);
 }
@@ -12,6 +16,9 @@ function isCategory(value: unknown): value is Category {
 }
 
 export async function POST(request: Request) {
+  const { unauthorized } = await requireApiUser();
+  if (unauthorized) return unauthorized;
+
   let body: unknown;
   try {
     body = await request.json();
