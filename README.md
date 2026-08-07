@@ -6,6 +6,10 @@ SmartCall AI is an AI-powered call routing platform that replaces traditional IV
 
 🔗 **Live demo:** [smart-call-ai-eta.vercel.app](https://smart-call-ai-eta.vercel.app)
 
+![SmartCall AI customer call screen — a single prompt reading "Hello. Please tell us how we can help today." above a Start Call button](docs/screenshots/call-screen.png)
+
+<p align="center"><em>The entire customer-facing interface: one prompt, one button, no menu tree.</em></p>
+
 ---
 
 ## The problem
@@ -30,25 +34,13 @@ The customer never presses a single number.
 
 ---
 
-## Screenshots
+## The three screens
 
-### Customer call screen
-
-The caller lands on a single prompt — no menu tree. Speech recognition is the default path, with a typed fallback for browsers or environments where the microphone isn't available.
-
-![SmartCall AI customer call screen](docs/screenshots/call-screen.png)
-
-### Admin dashboard
-
-Manage support agents: create, edit, delete, assign categories, and toggle availability between Available and Busy.
-
-![SmartCall AI admin dashboard](docs/screenshots/admin.png)
-
-### Analytics dashboard
-
-Routing performance at a glance — total calls, calls today, calls by department, agent availability, average routing time, and average AI confidence.
-
-![SmartCall AI analytics dashboard](docs/screenshots/analytics.png)
+| Screen | Route | Access | What it does |
+| --- | --- | --- | --- |
+| Customer call | `/` | Public | Speak or type an issue, watch it get classified and routed |
+| Admin | `/admin` | Sign-in required | Manage agents, categories, and availability |
+| Analytics | `/analytics` | Sign-in required | Routing volume, speed, and AI confidence |
 
 ---
 
@@ -170,6 +162,19 @@ Open [http://localhost:3000](http://localhost:3000). Sign up at `/signup` to rea
 
 Speech recognition requires a Chromium-based browser and a secure context (`localhost` or HTTPS). Everywhere else, use the "Speech not working? Type instead." fallback.
 
+### 5. Deploy
+
+Set all five environment variables in your hosting provider before deploying. On Vercel that's Settings → Environment Variables.
+
+The two `NEXT_PUBLIC_*` vars are **inlined at build time**, not read at runtime — so adding them after a deploy requires a *rebuild*, not a restart. If they're absent, the build still succeeds and the public call screen works, but auth is disabled: `/admin` and `/analytics` redirect to `/login`, and the server logs
+
+```
+[auth] NEXT_PUBLIC_SUPABASE_URL / NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY are not set;
+treating every request as signed out.
+```
+
+This is deliberate — a missing browser key shouldn't take down the routing demo with it — but it means a green deployment is not by itself proof that auth is configured. Check that you can sign in.
+
 ---
 
 ## Project structure
@@ -209,6 +214,36 @@ proxy.ts                    Session refresh (Next.js 16 `proxy`, ex-middleware)
 **agents** — `id`, `name`, `phone`, `department`, `categories[]`, `available`
 
 **calls** — `id`, `transcript`, `category`, `summary`, `confidence`, `reason`, `assigned_agent_id`, `assigned_agent_name`, `routing_time_ms`, `created_at`
+
+---
+
+## API
+
+| Method | Endpoint | Auth | Purpose |
+| --- | --- | --- | --- |
+| `POST` | `/api/route-call` | Public | Classify a transcript, assign an agent, log the call |
+| `GET` | `/api/agents` | Required | List all agents |
+| `POST` | `/api/agents` | Required | Create an agent |
+| `PATCH` | `/api/agents/[id]` | Required | Update an agent or toggle availability |
+| `DELETE` | `/api/agents/[id]` | Required | Delete an agent |
+| `GET` | `/api/analytics` | Required | Aggregated routing metrics |
+
+`POST /api/route-call` takes `{ transcript, forceCategory? }` and returns the classification plus the assigned agent:
+
+```jsonc
+// → { "transcript": "My internet has been down since yesterday even though I paid." }
+{
+  "category": "Technical Support",
+  "summary": "Customer reports an internet outage since yesterday despite payment.",
+  "confidence": 94,
+  "reason": "The customer describes a service outage, which indicates a Technical Support issue.",
+  "agent": { "id": "…", "name": "Sarah", "phone": "070XXXXXXX" },
+  "queued": false,
+  "callId": "…"
+}
+```
+
+`forceCategory` bypasses the classifier entirely — it backs the low-confidence escape hatch, where the caller asks for a general agent instead of trusting the AI's guess. When no agent in the category is free, `agent` is `null` and `queued` is `true`.
 
 ---
 

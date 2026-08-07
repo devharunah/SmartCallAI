@@ -1,6 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
-import { SUPABASE_PUBLISHABLE_KEY, SUPABASE_URL } from "./env";
+import { isSupabaseConfigured, requireSupabaseEnv } from "./env";
 
 // The proxy is the optimistic fast path only. The authoritative checks live in
 // app/(protected)/layout.tsx for pages and requireApiUser() for route handlers.
@@ -22,10 +22,31 @@ function withCookies(from: NextResponse, to: NextResponse) {
   return to;
 }
 
+/** Signed-out redirect for a protected page, or pass-through for a public one. */
+function redirectIfProtected(request: NextRequest, response: NextResponse) {
+  const { pathname, search } = request.nextUrl;
+  if (!isProtectedPage(pathname)) return response;
+
+  const loginUrl = request.nextUrl.clone();
+  loginUrl.pathname = "/login";
+  loginUrl.search = ""; // else /admin?foo=1 leaks foo onto /login's own params
+  loginUrl.searchParams.set("next", `${pathname}${search}`);
+  return withCookies(response, NextResponse.redirect(loginUrl));
+}
+
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request });
 
-  const supabase = createServerClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+  // No config means no session can be verified. Fail closed — public routes stay
+  // reachable, protected ones bounce to /login — instead of throwing a 500 on
+  // every request, which the broad matcher above would apply to the whole site.
+  if (!isSupabaseConfigured) {
+    return redirectIfProtected(request, supabaseResponse);
+  }
+
+  const { url, publishableKey } = requireSupabaseEnv();
+
+  const supabase = createServerClient(url, publishableKey, {
     cookies: {
       getAll() {
         return request.cookies.getAll();
@@ -52,16 +73,9 @@ export async function updateSession(request: NextRequest) {
   // ordinary signed-out case, so this must not be destructured.
   const claims = data?.claims ?? null;
 
-  const { pathname, search } = request.nextUrl;
+  // Must be returned as-is when signed in: setAll above reassigns
+  // supabaseResponse to carry rotated tokens.
+  if (claims) return supabaseResponse;
 
-  if (!claims && isProtectedPage(pathname)) {
-    const loginUrl = request.nextUrl.clone();
-    loginUrl.pathname = "/login";
-    loginUrl.search = ""; // else /admin?foo=1 leaks foo onto /login's own params
-    loginUrl.searchParams.set("next", `${pathname}${search}`);
-    return withCookies(supabaseResponse, NextResponse.redirect(loginUrl));
-  }
-
-  // Must be returned as-is: setAll above reassigns it to carry rotated tokens.
-  return supabaseResponse;
+  return redirectIfProtected(request, supabaseResponse);
 }
