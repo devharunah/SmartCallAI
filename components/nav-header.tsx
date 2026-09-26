@@ -12,7 +12,7 @@ export async function NavHeader() {
 
   return (
     <header className="border-b border-border bg-background">
-      <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
+      <div className="mx-auto flex max-w-5xl items-center justify-between gap-2 px-4 py-4 sm:px-6">
         <Link href="/" className="flex items-center gap-2">
           <span className="flex size-7 items-center justify-center rounded-full bg-primary text-primary-foreground">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -22,9 +22,9 @@ export async function NavHeader() {
               />
             </svg>
           </span>
-          <span className="font-semibold tracking-tight">SmartCall AI</span>
+          <span className="hidden font-semibold tracking-tight sm:inline">SmartCall AI</span>
         </Link>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
           <NavLinks />
           {claims ? (
             <div className="flex items-center gap-2">
