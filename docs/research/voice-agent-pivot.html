@@ -1,0 +1,505 @@
+<title>SmartCallAI Voice Pivot</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#ffffff; --surface:#f6f8f7; --ink:#0a0a0a; --ink-2:#3d4340; --muted:#5f6663;
+  --line:#e3e8e6; --accent:#00a884; --accent-soft:#e3f7f1; --accent-ink:#006b54;
+  --warn:#9a6700; --warn-soft:#fff5d6; --bad:#b83b3b; --bad-soft:#fdeaea; --good:#1a7f37; --good-soft:#e6f4ea;
+  --code-bg:#f3f5f4;
+  --font:"Geist",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"Geist Mono",ui-monospace,"SFMono-Regular",Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  color-scheme:dark;
+  --bg:#0c0f0e; --surface:#141917; --ink:#ecf0ee; --ink-2:#c4ccc8; --muted:#8d9793;
+  --line:#26302c; --accent:#19d3a6; --accent-soft:#0f2a23; --accent-ink:#5ce6c3;
+  --warn:#e8b543; --warn-soft:#2b2310; --bad:#f07a7a; --bad-soft:#2e1616; --good:#5fd07e; --good-soft:#12261a;
+  --code-bg:#111614;
+}}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0c0f0e; --surface:#141917; --ink:#ecf0ee; --ink-2:#c4ccc8; --muted:#8d9793;
+  --line:#26302c; --accent:#19d3a6; --accent-soft:#0f2a23; --accent-ink:#5ce6c3;
+  --warn:#e8b543; --warn-soft:#2b2310; --bad:#f07a7a; --bad-soft:#2e1616; --good:#5fd07e; --good-soft:#12261a;
+  --code-bg:#111614;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:16px;line-height:1.65;padding-inline:16px;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1120px;margin:0 auto;display:grid;grid-template-columns:220px minmax(0,1fr);gap:56px;padding-block:48px 96px}
+nav.toc{position:sticky;top:calc(env(safe-area-inset-top,0px) + 24px);align-self:start;font-size:14px}
+nav.toc .label{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;font-weight:600}
+nav.toc ol{list-style:none;margin:0;padding:0;display:grid;gap:2px;counter-reset:s}
+nav.toc a{display:block;padding:6px 10px;border-radius:8px;color:var(--ink-2);text-decoration:none;border-left:2px solid transparent}
+nav.toc a:hover{background:var(--surface);color:var(--ink)}
+nav.toc a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+main{min-width:0;max-width:760px}
+header.top .eyebrow{font-family:var(--mono);font-size:12px;color:var(--accent-ink);letter-spacing:.04em}
+h1{font-size:clamp(30px,4.2vw,42px);line-height:1.12;letter-spacing:-.025em;margin:10px 0 14px;text-wrap:balance;font-weight:700}
+.lede{font-size:18px;color:var(--ink-2);margin:0 0 20px;text-wrap:pretty}
+.meta{display:flex;flex-wrap:wrap;gap:8px;font-size:13px;color:var(--muted);margin-bottom:8px}
+.meta span{border:1px solid var(--line);border-radius:999px;padding:3px 10px;font-variant-numeric:tabular-nums}
+section{margin-top:64px;scroll-margin-top:24px}
+h2{font-size:26px;letter-spacing:-.018em;line-height:1.25;margin:0 0 6px;text-wrap:balance}
+h2 .n{font-family:var(--mono);font-size:14px;color:var(--muted);font-weight:500;margin-right:10px;vertical-align:3px}
+h3{font-size:18px;margin:32px 0 8px;letter-spacing:-.01em}
+p{margin:0 0 14px;text-wrap:pretty}
+.sub{color:var(--muted);margin-bottom:20px}
+a{color:var(--accent-ink);text-underline-offset:3px}
+ul,ol{padding-left:22px;margin:0 0 14px}
+li{margin:4px 0}
+strong{font-weight:600}
+code{font-family:var(--mono);font-size:.88em;background:var(--code-bg);border:1px solid var(--line);border-radius:5px;padding:1px 5px}
+pre.code{font-family:var(--mono);font-size:13px;line-height:1.6;background:var(--code-bg);border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow-x:auto;margin:0 0 16px}
+pre.code code{background:none;border:0;padding:0;font-size:inherit}
+.tldr{border:1px solid var(--line);border-radius:16px;padding:22px 24px;background:var(--surface);margin-top:28px}
+.tldr h2{font-size:15px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:12px}
+.tldr ul{margin:0;padding-left:20px}
+.tldr li{margin:8px 0}
+.pick{border:1.5px solid var(--accent);background:var(--accent-soft);border-radius:16px;padding:20px 22px;margin:20px 0}
+.pick .tag{display:inline-block;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent-ink);font-weight:600;margin-bottom:6px}
+.pick h3{margin:0 0 6px}
+.pick p:last-child{margin-bottom:0}
+.note{border-left:3px solid var(--warn);background:var(--warn-soft);padding:12px 16px;border-radius:0 10px 10px 0;margin:16px 0;font-size:15px}
+.note.bad{border-color:var(--bad);background:var(--bad-soft)}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;margin:12px 0 20px}
+table{border-collapse:collapse;width:100%;font-size:14px;min-width:560px}
+th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:600;background:var(--surface)}
+tr:last-child td{border-bottom:0}
+td.num,th.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+tr.hl td{background:var(--accent-soft)}
+.pill{display:inline-block;font-size:12px;font-weight:600;border-radius:999px;padding:2px 9px;white-space:nowrap}
+.pill.good{background:var(--good-soft);color:var(--good)}
+.pill.warn{background:var(--warn-soft);color:var(--warn)}
+.pill.bad{background:var(--bad-soft);color:var(--bad)}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:16px 0}
+.opt{border:1px solid var(--line);border-radius:14px;padding:16px 18px;display:flex;flex-direction:column;gap:6px}
+.opt .k{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.opt h4{margin:0;font-size:16px}
+.opt p{font-size:14px;color:var(--ink-2);margin:0}
+.opt .cost{font-family:var(--mono);font-size:13px;color:var(--ink);font-variant-numeric:tabular-nums;margin-top:auto;padding-top:8px;border-top:1px dashed var(--line)}
+.flow{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:16px 0 20px;font-size:14px}
+.flow .box{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:8px 12px}
+.flow .box.us{border-color:var(--accent);background:var(--accent-soft);font-weight:600}
+.flow .arr{color:var(--muted);font-family:var(--mono)}
+.steps{list-style:none;padding:0;counter-reset:st;display:grid;gap:12px}
+.steps li{counter-increment:st;display:grid;grid-template-columns:34px 1fr;gap:12px;margin:0}
+.steps li::before{content:counter(st);width:28px;height:28px;border-radius:50%;border:1.5px solid var(--accent);color:var(--accent-ink);font-family:var(--mono);font-size:13px;display:grid;place-items:center;font-weight:600}
+.steps li div p{margin:2px 0 0;color:var(--ink-2);font-size:15px}
+.src{font-size:14px;color:var(--ink-2)}
+.src li{margin:6px 0}
+.lat{display:grid;gap:8px;margin:14px 0 20px}
+.lat .row{display:grid;grid-template-columns:130px 1fr 70px;gap:12px;align-items:center;font-size:14px}
+.lat .bar{height:12px;border-radius:6px;background:var(--line);overflow:hidden}
+.lat .bar i{display:block;height:100%;background:var(--accent);border-radius:6px}
+.lat .ms{font-family:var(--mono);font-variant-numeric:tabular-nums;text-align:right}
+footer{margin-top:72px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+@media (max-width:900px){
+  .wrap{grid-template-columns:1fr;gap:24px;padding-block:28px 72px}
+  nav.toc{position:static;border:1px solid var(--line);border-radius:12px;padding:14px}
+  nav.toc ol{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+  .lat .row{grid-template-columns:96px 1fr 58px}
+}
+@media (prefers-reduced-motion:no-preference){nav.toc a{transition:background-color .15s ease,color .15s ease}}
+</style>
+
+<div class="wrap">
+<nav class="toc" aria-label="Contents">
+  <div class="label">Contents</div>
+  <ol>
+    <li><a href="#tldr">TL;DR</a></li>
+    <li><a href="#shift">What changes</a></li>
+    <li><a href="#how">How phone AI works</a></li>
+    <li><a href="#market">The market</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#sdk">Vercel AI SDK</a></li>
+    <li><a href="#options">3 ways to build</a></li>
+    <li><a href="#rec">Recommendation</a></li>
+    <li><a href="#code">Starter code</a></li>
+    <li><a href="#plan">Build plan</a></li>
+    <li><a href="#risks">Risks &amp; gaps</a></li>
+    <li><a href="#sources">Sources</a></li>
+  </ol>
+</nav>
+
+<main>
+<header class="top">
+  <div class="eyebrow">RESEARCH · DEEP-RESEARCH SKILL</div>
+  <h1>From call router to AI that solves the call</h1>
+  <p class="lede">How ElevenLabs, Vapi, Retell and Bland build phone agents, what they charge, and how to build SmartCallAI's version in TypeScript on the Vercel AI SDK with no Python backend.</p>
+  <div class="meta"><span>2026-09-25</span><span>~45 sources</span><span>Prices checked on vendor pages</span><span>Confidence: medium-high</span></div>
+</header>
+
+<div class="tldr" id="tldr">
+  <h2>TL;DR</h2>
+  <ul>
+    <li><strong>The pivot:</strong> today the AI classifies the caller and hands them to a human. The new version <strong>talks to the caller, uses tools to fix the problem</strong> (look up an account, reset something, open a ticket), and only transfers to a human when it can't. Your existing agents table becomes the <strong>escalation path</strong>.</li>
+    <li><strong>Every platform does the same three things:</strong> it turns speech into text, runs an LLM with tools, and turns the reply back into speech, all within about a second. Most of the engineering goes into turn-taking and interruptions.</li>
+    <li><strong>Market price is about $0.08–0.15 per minute all-in.</strong> ElevenLabs charges $0.08/min plus LLM. Vapi charges $0.05/min plus every component. Retell's total is $0.07–0.31/min. Bland charges a flat $0.12–0.14/min.</li>
+    <li><strong>The AI SDK is v7</strong> (<code>ai@7.0.114</code>). It is a good fit for the "brain": <code>streamText</code>, <code>tool()</code>, <code>ToolLoopAgent</code>, structured output, and stable <code>transcribe</code>/<code>generateSpeech</code>. It does <strong>not</strong> handle phone audio. Pair it with a telephony layer.</li>
+    <li><strong>Recommendation:</strong> use <strong>Twilio ConversationRelay</strong> (Twilio handles speech in and out plus interruptions) and connect it to <strong>our own AI SDK agent</strong>. It's all TypeScript, costs about <strong>$0.09–0.10/min</strong>, and we own the logic. The only extra infrastructure is one small WebSocket service.</li>
+  </ul>
+</div>
+
+<section id="shift">
+  <h2><span class="n">01</span>What changes in SmartCallAI</h2>
+  <p class="sub">Same caller, same database. The AI does the work instead of routing it.</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th></th><th>Today (router)</th><th>Next (resolver)</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Entry</strong></td><td>Web page, browser speech or typed text</td><td>A real phone number (and the web page, kept as a test console)</td></tr>
+      <tr><td><strong>AI job</strong></td><td>One classification: category + confidence</td><td>A full conversation: understand, ask follow-ups, call tools, confirm</td></tr>
+      <tr><td><strong>Outcome</strong></td><td>"Connecting you to Grace"</td><td>"Done, I've reset your router's line. Anything else?"</td></tr>
+      <tr><td><strong>Humans</strong></td><td>Every call goes to one</td><td>Only escalations: <code>transferToHuman</code> picks an available agent from the existing <code>agents</code> table</td></tr>
+      <tr><td><strong>Analytics</strong></td><td>Category, confidence, routing time</td><td>Plus resolved/escalated, duration, tools used, cost per call, success score</td></tr>
+    </tbody>
+  </table></div>
+  <p>Most of the current code carries over. <code>lib/agents.ts</code> becomes the escalation tool, <code>lib/calls.ts</code> records transcripts and outcomes, and the admin and analytics pages stay as the supervisor view.</p>
+</section>
+
+<section id="how">
+  <h2><span class="n">02</span>How a phone AI agent works</h2>
+  <p class="sub">Two architectures. Almost every platform uses the first.</p>
+
+  <h3>Cascaded pipeline: speech-to-text → LLM → text-to-speech</h3>
+  <div class="flow" role="img" aria-label="Caller to phone network to speech-to-text to LLM with tools to text-to-speech and back to caller">
+    <span class="box">Caller</span><span class="arr">→</span>
+    <span class="box">Phone network (Twilio)</span><span class="arr">→</span>
+    <span class="box">Speech-to-text</span><span class="arr">→</span>
+    <span class="box us">LLM + tools (our code)</span><span class="arr">→</span>
+    <span class="box">Text-to-speech</span><span class="arr">→</span>
+    <span class="box">Caller hears reply</span>
+  </div>
+  <p>Each stage streams, so the voice starts playing before the LLM has finished its sentence. This is the flexible option: you pick any LLM, any voice, and your own tools. <strong>This is where the AI SDK fits.</strong></p>
+
+  <h3>Speech-to-speech: one model hears and speaks</h3>
+  <p>OpenAI's <code>gpt-realtime</code> and Gemini Live take audio in and produce audio out directly. Latency and intonation are better, but it costs more (roughly $0.18–0.21/min in one benchmark, unverified), you have less control, and the AI SDK support for it is still <em>experimental</em>.</p>
+
+  <h3>The latency budget</h3>
+  <p>A reply has to start about a second after the caller stops talking, or the call feels broken. Here is Twilio's published target for a cascaded agent:</p>
+  <div class="lat" aria-label="Latency budget chart">
+    <div class="row"><span>Speech-to-text</span><div class="bar"><i style="width:31%"></i></div><span class="ms">350ms</span></div>
+    <div class="row"><span>LLM first token</span><div class="bar"><i style="width:34%"></i></div><span class="ms">375ms</span></div>
+    <div class="row"><span>Voice first audio</span><div class="bar"><i style="width:9%"></i></div><span class="ms">100ms</span></div>
+    <div class="row"><span><strong>Total turn gap</strong></span><div class="bar"><i style="width:100%"></i></div><span class="ms"><strong>1,115ms</strong></span></div>
+  </div>
+  <p>Blogs cite "under 800ms feels natural". To get there, use a fast, small LLM, keep the prompt short (fetch knowledge with a tool instead of pasting it in), and host the server close to Twilio's US-East edge.</p>
+
+  <h3>The hard parts (what the platforms really sell)</h3>
+  <ul>
+    <li><strong>End-of-turn detection:</strong> is a pause the caller thinking, or finished? Fixed silence timers (~500ms) cut people off. Model-based detection (OpenAI <code>semantic_vad</code>, LiveKit's turn detector) is better.</li>
+    <li><strong>Barge-in:</strong> when the caller talks over the AI, stop the audio immediately and stop the LLM too. With ConversationRelay, Twilio sends us an <code>interrupt</code> message and we abort the stream.</li>
+    <li><strong>Tools that actually resolve things:</strong> account lookup, resets, refunds, tickets, bookings. The model decides when to call them. Our server checks and authorizes every call.</li>
+    <li><strong>Handoff:</strong> a cold transfer (end the AI session, dial a human) or a warm transfer (the human joins a conference, and the AI briefs them and leaves).</li>
+    <li><strong>After the call:</strong> a transcript, a summary, "was it resolved?" scoring, and pulling structured data out of the conversation. ElevenLabs sends these through post-call webhooks. We can do the same with <code>generateText</code> plus <code>Output.object</code>.</li>
+  </ul>
+</section>
+
+<section id="market">
+  <h2><span class="n">03</span>The market: who does what</h2>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Platform</th><th>Positioning</th><th>Stand-out features</th><th>Bring your own LLM?</th></tr></thead>
+    <tbody>
+      <tr><td><strong>ElevenLabs Agents</strong></td><td>Best voices, creators → enterprise</td><td>5k+ voices, 31 languages, knowledge base/RAG, MCP tools, visual workflow builder, tests + A/B, post-call analysis</td><td>Yes: a "custom LLM" URL speaking OpenAI format</td></tr>
+      <tr><td><strong>Vapi</strong></td><td>Developer platform, assemble your own pipeline</td><td>Pick each speech-to-text, LLM and voice provider; "Squads" of assistants; evals; claims &lt;600ms</td><td>Yes</td></tr>
+      <tr><td><strong>Retell AI</strong></td><td>Phone automation for regulated industries</td><td>Warm handoff with briefing, phone-menu navigation, QA on 100% of calls, HIPAA/SOC 2</td><td>Yes (priced per model)</td></tr>
+      <tr><td><strong>Bland AI</strong></td><td>High-volume, self-hosted, enterprise</td><td>Flat price, no token fees, on-prem/VPC, conversation "pathways"</td><td>No, bundled</td></tr>
+      <tr><td><strong>Synthflow</strong></td><td>No-code, call centers</td><td>200+ integrations, white-label</td><td>Limited</td></tr>
+      <tr><td><strong>PolyAI</strong></td><td>Enterprise only</td><td>Its own model, contact-center integrations</td><td>No</td></tr>
+    </tbody>
+  </table></div>
+  <p><strong>The pattern:</strong> they all sell the same thing, a phone number that answers, talks naturally, calls your APIs, and hands off cleanly. Their differences are voice quality, how much you can customize, compliance, and price.</p>
+</section>
+
+<section id="pricing">
+  <h2><span class="n">04</span>Pricing, in detail</h2>
+  <p class="sub">Checked on the vendors' own pricing pages on 2026-09-25. "All-in" figures are our arithmetic from their list prices for a US call with a cheap-to-mid LLM.</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Platform</th><th class="num">Base rate</th><th>Billed on top</th><th class="num">Est. all-in / min</th><th>Free tier</th></tr></thead>
+    <tbody>
+      <tr><td><strong>ElevenLabs</strong></td><td class="num">$0.080/min</td><td>LLM tokens. No telephony fee from ElevenLabs, but your Twilio/SIP carrier bills you</td><td class="num">~$0.09–0.13</td><td>15 min/mo</td></tr>
+      <tr><td><strong>Vapi</strong></td><td class="num">$0.05/min</td><td>Speech-to-text $0.0095, LLM $0.008–0.045, voice $0.015–0.024, Twilio $0.008 in</td><td class="num">~$0.08–0.14</td><td>$5 credit</td></tr>
+      <tr><td><strong>Retell</strong></td><td class="num">$0.055/min infra</td><td>Voice $0.015–0.04, LLM $0.048–0.16, telephony $0.015</td><td class="num">~$0.13–0.27</td><td>$10 credit</td></tr>
+      <tr><td><strong>Bland</strong></td><td class="num">$0.12–0.14/min</td><td>Transfer minutes $0.04–0.05. $299/mo on Build</td><td class="num">~$0.12–0.14</td><td>Start plan $0</td></tr>
+      <tr class="hl"><td><strong>DIY: Twilio ConversationRelay + AI SDK</strong></td><td class="num">$0.07/min</td><td>Inbound $0.0085, LLM (e.g. gpt-4o-mini ≈ $0.005–0.02), number $1.15/mo</td><td class="num">~$0.085–0.10</td><td>Twilio trial</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>ElevenLabs plans (the reference you mentioned)</h3>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Plan</th><th class="num">Price / mo</th><th class="num">Minutes included</th><th class="num">Concurrent calls</th></tr></thead>
+    <tbody>
+      <tr><td>Free</td><td class="num">$0</td><td class="num">15</td><td class="num">4</td></tr>
+      <tr><td>Starter</td><td class="num">$6</td><td class="num">75</td><td class="num">6</td></tr>
+      <tr><td>Creator</td><td class="num">$22</td><td class="num">275</td><td class="num">10</td></tr>
+      <tr><td>Pro</td><td class="num">$99</td><td class="num">1,238</td><td class="num">20</td></tr>
+      <tr><td>Scale</td><td class="num">$299</td><td class="num">3,738</td><td class="num">30</td></tr>
+      <tr><td>Business</td><td class="num">$990</td><td class="num">12,375</td><td class="num">40</td></tr>
+    </tbody>
+  </table></div>
+  <p>Every plan works out to $0.08 per minute. Extra minutes are $0.080 (burst up to 3× concurrency at $0.160). <strong>A bigger plan buys you concurrency, not a cheaper rate.</strong> LLM usage is billed on top per token.</p>
+
+  <h3>Twilio building blocks (US)</h3>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Item</th><th class="num">Price</th></tr></thead>
+    <tbody>
+      <tr><td>Local phone number</td><td class="num">$1.15 / mo</td></tr>
+      <tr><td>Inbound local call</td><td class="num">$0.0085 / min</td></tr>
+      <tr><td>Outbound call</td><td class="num">$0.0140 / min</td></tr>
+      <tr><td>ConversationRelay (speech-to-text + text-to-speech + turn-taking)</td><td class="num">$0.07 / min</td></tr>
+      <tr><td>Media Streams (raw audio, you handle speech)</td><td class="num">$0.0044 / min</td></tr>
+      <tr><td>SIP interface</td><td class="num">$0.0040 / min</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note"><strong>For scale:</strong> 1,000 calls averaging 3 minutes is 3,000 minutes, which costs about <strong>$270–300</strong> with the DIY stack or about $240 plus LLM on ElevenLabs. For a demo, you'll spend a few dollars.</div>
+</section>
+
+<section id="sdk">
+  <h2><span class="n">05</span>The Vercel AI SDK (v7) for a voice agent</h2>
+  <p class="sub">What it gives us, what changed, and what it doesn't cover.</p>
+
+  <h3>Current state</h3>
+  <ul>
+    <li><code>ai@7.0.114</code> is <code>latest</code> on npm (released 24 Sep 2026). v5 and v6 still get patches, but <strong>most tutorials online are v5/v6 and use old names.</strong> v7 needs Node 22+ and is ESM-only.</li>
+    <li>Provider packages: <code>@ai-sdk/openai@4</code>, plus <code>@ai-sdk/anthropic</code>, <code>@ai-sdk/elevenlabs</code>, <code>@ai-sdk/deepgram</code>. Or skip them and use <strong>AI Gateway</strong> model strings like <code>"openai/…"</code> with no markup on tokens, fallbacks, and budgets.</li>
+  </ul>
+
+  <h3>The pieces we'd use</h3>
+  <div class="tablewrap"><table>
+    <thead><tr><th>API</th><th>What it's for in SmartCallAI</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td><code>streamText</code> + <code>textStream</code></td><td>The agent's reply, streamed token by token to Twilio so speech starts immediately</td><td><span class="pill good">stable</span></td></tr>
+      <tr><td><code>tool({ inputSchema: z.object(…), execute })</code></td><td><code>lookupCustomer</code>, <code>createTicket</code>, <code>checkOutage</code>, <code>transferToHuman</code></td><td><span class="pill good">stable</span></td></tr>
+      <tr><td><code>stopWhen: isStepCount(n)</code></td><td>Cap tool loops so a call can't spin</td><td><span class="pill good">stable</span></td></tr>
+      <tr><td><code>ToolLoopAgent</code></td><td>Package the instructions, model and tools as one reusable "support agent"</td><td><span class="pill good">stable</span></td></tr>
+      <tr><td><code>generateText</code> + <code>Output.object</code></td><td>Post-call summary, "resolved?" score, category (replaces today's JSON parsing)</td><td><span class="pill good">stable</span></td></tr>
+      <tr><td><code>abortSignal</code> / <code>timeout</code></td><td>Stop generating when the caller interrupts, and don't hang on a slow tool</td><td><span class="pill good">stable</span></td></tr>
+      <tr><td><code>transcribe</code> / <code>generateSpeech</code></td><td>Voicemail transcription, pre-rendered greetings. Too batch-oriented for live calls</td><td><span class="pill good">stable</span></td></tr>
+      <tr><td><code>experimental_useRealtime</code>, realtime models</td><td>Speech-to-speech in the browser, or over a Node WebSocket</td><td><span class="pill warn">experimental</span></td></tr>
+      <tr><td>Phone audio (μ-law 8kHz), telephony</td><td>Not covered. Needs Twilio / ElevenLabs / SIP</td><td><span class="pill bad">not in SDK</span></td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>v7 renames that trip people up</h3>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Old (v5/v6 tutorials)</th><th>v7</th></tr></thead>
+    <tbody>
+      <tr><td><code>system: "…"</code></td><td><code>instructions: "…"</code></td></tr>
+      <tr><td><code>stepCountIs(5)</code></td><td><code>isStepCount(5)</code></td></tr>
+      <tr><td><code>experimental_transcribe</code> / <code>experimental_generateSpeech</code></td><td><code>transcribe</code> / <code>generateSpeech</code></td></tr>
+      <tr><td><code>result.fullStream</code></td><td><code>result.stream</code></td></tr>
+      <tr><td><code>onFinish</code> / <code>onStepFinish</code></td><td><code>onEnd</code> / <code>onStepEnd</code></td></tr>
+      <tr><td><code>result.toUIMessageStreamResponse()</code></td><td><code>createUIMessageStreamResponse({ stream: toUIMessageStream({ stream: result.stream }) })</code></td></tr>
+      <tr><td><code>experimental_telemetry</code></td><td><code>telemetry</code> + <code>@ai-sdk/otel</code></td></tr>
+    </tbody>
+  </table></div>
+  <p>Run <code>npx @ai-sdk/codemod v7</code> on any copied v6 code.</p>
+
+  <h3>Hosting on Vercel: the one real constraint</h3>
+  <p>A phone call through ConversationRelay is <strong>one WebSocket that lasts the whole call</strong>. Vercel Functions can serve WebSockets as of June 2026, but it's a <strong>public beta</strong>, you need <code>experimental_upgradeWebSocket()</code> in Next.js, and the socket <strong>closes when the function hits its max duration</strong>: 300s on Hobby, 800s on Pro, and 1,800s (30 min) in the extended beta. When the socket closes, the call drops.</p>
+  <div class="note bad">So: prototype on Vercel if you like, but run the call socket as a <strong>small, always-on Node service</strong> (Fly.io / Railway / Render, US-East). The Next.js app stays on Vercel for the dashboard, APIs and database. Both share the same TypeScript <code>lib/</code> code.</div>
+</section>
+
+<section id="options">
+  <h2><span class="n">06</span>Three ways to build it (all TypeScript)</h2>
+  <div class="opts">
+    <div class="opt">
+      <span class="k">OPTION A</span>
+      <h4>Twilio ConversationRelay + AI SDK</h4>
+      <p>Twilio does speech-to-text (Deepgram), the voice (ElevenLabs by default) and interruptions. It sends us <strong>text</strong> over a WebSocket, and we stream <strong>text</strong> back from <code>streamText</code>.</p>
+      <p>✓ We own the agent · ✓ AI SDK does all the thinking · ✗ Needs one small WebSocket service</p>
+      <span class="cost">≈ $0.085–0.10 / min</span>
+    </div>
+    <div class="opt">
+      <span class="k">OPTION B</span>
+      <h4>ElevenLabs Agents + our AI SDK as "custom LLM"</h4>
+      <p>ElevenLabs runs the phone, voice and turn-taking. It calls <strong>our Next.js route</strong>, which runs <code>streamText</code> and returns OpenAI-format streaming.</p>
+      <p>✓ Plain HTTP, runs on Vercel as-is · ✓ Best voices · ✗ Their dashboard, their lock-in · ✗ No official AI SDK example</p>
+      <span class="cost">≈ $0.09–0.13 / min</span>
+    </div>
+    <div class="opt">
+      <span class="k">OPTION C</span>
+      <h4>OpenAI Realtime over SIP</h4>
+      <p>A Twilio SIP trunk connects straight to OpenAI's speech-to-speech model. We accept calls, run tools and transfer through webhooks.</p>
+      <p>✓ Lowest latency · ✓ No media server · ✗ Barely uses the AI SDK · ✗ Locked to one model</p>
+      <span class="cost">≈ token-based, roughly $0.03–0.10+ / min</span>
+    </div>
+  </div>
+</section>
+
+<section id="rec">
+  <h2><span class="n">07</span>Recommendation</h2>
+  <div class="pick">
+    <span class="tag">Build this</span>
+    <h3>Option A: Twilio ConversationRelay → our AI SDK agent</h3>
+    <p>It matches what you asked for: the <strong>Vercel AI SDK is the brain</strong>, with no Python and no platform lock-in. Twilio handles the audio work that is hardest to get right (speech recognition, voices, barge-in), and our TypeScript code handles everything else: the conversation, tools, Supabase, and escalation to the humans we already model.</p>
+  </div>
+  <ul>
+    <li><strong>Fallback:</strong> if you want the ElevenLabs experience with the least infrastructure, Option B reuses the same AI SDK agent code behind an HTTP route. The agent (instructions + tools) is written once and runs behind either.</li>
+    <li><strong>Keep the web call screen</strong> as a test console. It can hit the same agent over text with <code>useChat</code>, which is how we'll test tools without dialing a phone.</li>
+    <li><strong>Model:</strong> start with a small, fast model for latency (the repo already uses <code>gpt-4o-mini</code>). Route through AI Gateway so we can swap or add a fallback without code changes.</li>
+  </ul>
+</section>
+
+<section id="code">
+  <h2><span class="n">08</span>Starter code (sketch)</h2>
+  <p class="sub">Written against the v7 docs checked today. It's a starting point and has not been run yet. The shapes of Twilio's messages (<code>setup</code>, <code>prompt</code>, <code>interrupt</code>, <code>text</code>, <code>end</code>) come from Twilio's docs.</p>
+
+  <h3>1. The agent: <code>lib/voice-agent.ts</code> (shared by phone and web)</h3>
+<pre class="code"><code>import { tool } from "ai";
+import { z } from "zod";
+import { findAvailableAgent } from "@/lib/agents";
+
+export const instructions = `You are SmartCall, a phone support agent.
+Speak in short, natural sentences (this is read aloud). Solve the caller's
+problem with your tools. Only transfer when you cannot help or they insist.`;
+
+export function makeTools(ctx: { callSid: string; onTransfer: (reason: string, phone: string) =&gt; void }) {
+  return {
+    lookupCustomer: tool({
+      description: "Find the caller's account by phone number",
+      inputSchema: z.object({ phone: z.string() }),
+      execute: async ({ phone }) =&gt; ({ /* query Supabase */ }),
+    }),
+    createTicket: tool({
+      description: "Open a support ticket when follow-up is needed",
+      inputSchema: z.object({ summary: z.string(), category: z.string() }),
+      execute: async (t) =&gt; ({ ticketId: "…" }),
+    }),
+    transferToHuman: tool({
+      description: "Hand the caller to a human agent",
+      inputSchema: z.object({ category: z.string(), reason: z.string() }),
+      execute: async ({ category, reason }) =&gt; {
+        const agent = await findAvailableAgent(category);   // existing code
+        if (!agent) return { queued: true };
+        ctx.onTransfer(reason, agent.phone);
+        return { transferringTo: agent.name };
+      },
+    }),
+  };
+}</code></pre>
+
+  <h3>2. The call socket: <code>voice-server/index.ts</code> (small Node service)</h3>
+<pre class="code"><code>import { WebSocketServer } from "ws";
+import { streamText, isStepCount, type ModelMessage } from "ai";
+import { openai } from "@ai-sdk/openai";
+import { instructions, makeTools } from "../lib/voice-agent";
+
+const wss = new WebSocketServer({ port: 8080 });   // verify X-Twilio-Signature on upgrade
+
+wss.on("connection", (ws) =&gt; {
+  const messages: ModelMessage[] = [];
+  let callSid = "";
+  let abort: AbortController | undefined;
+
+  const send = (m: object) =&gt; ws.send(JSON.stringify(m));
+  const tools = () =&gt; makeTools({
+    callSid,
+    onTransfer: (reason, phone) =&gt;
+      send({ type: "end", handoffData: JSON.stringify({ reasonCode: "live-agent-handoff", reason, phone }) }),
+  });
+
+  ws.on("message", async (raw) =&gt; {
+    const msg = JSON.parse(raw.toString());
+
+    if (msg.type === "setup") callSid = msg.callSid;
+    if (msg.type === "interrupt") abort?.abort();          // caller talked over us
+    if (msg.type !== "prompt") return;
+
+    messages.push({ role: "user", content: msg.voicePrompt });
+    abort = new AbortController();
+    const result = streamText({
+      model: openai("gpt-4o-mini"),
+      instructions,
+      messages,
+      tools: tools(),
+      stopWhen: isStepCount(4),
+      abortSignal: abort.signal,
+    });
+
+    for await (const token of result.textStream) send({ type: "text", token, last: false });
+    send({ type: "text", token: "", last: true });
+    messages.push(...(await result.response).messages);
+  });
+});</code></pre>
+
+  <h3>3. Answering the phone: <code>app/api/voice/incoming/route.ts</code> (Next.js on Vercel)</h3>
+<pre class="code"><code>// Twilio number → "A call comes in" webhook → this route.
+export async function POST() {
+  const twiml = `&lt;Response&gt;
+  &lt;Connect action="${process.env.APP_URL}/api/voice/handoff"&gt;
+    &lt;ConversationRelay url="${process.env.VOICE_WS_URL}"
+      welcomeGreeting="Hi, this is SmartCall. How can I help?" /&gt;
+  &lt;/Connect&gt;
+&lt;/Response&gt;`;
+  return new Response(twiml, { headers: { "Content-Type": "text/xml" } });
+}
+// /api/voice/handoff reads HandoffData and returns &lt;Dial&gt;{phone}&lt;/Dial&gt; to reach the human.</code></pre>
+</section>
+
+<section id="plan">
+  <h2><span class="n">09</span>Build plan</h2>
+  <p class="sub">Each step ends with something you can try.</p>
+  <ol class="steps">
+    <li><div><strong>Agent on the web first</strong><p>Upgrade to <code>ai@7</code>, write <code>lib/voice-agent.ts</code>, and put it behind a <code>useChat</code> route on the existing call screen. Test the tools by typing. No phone yet.</p></div></li>
+    <li><div><strong>Mock backend tools</strong><p>Add <code>customers</code> and <code>tickets</code> tables in a new Supabase migration, plus 3–4 tools the agent can actually resolve with (outage check, password reset, billing lookup).</p></div></li>
+    <li><div><strong>Phone number</strong><p>Buy a Twilio number ($1.15/mo) and point it at <code>/api/voice/incoming</code>. Run the <code>voice-server</code> locally behind a tunnel (ngrok/cloudflared) and make a real call.</p></div></li>
+    <li><div><strong>Interruptions + escalation</strong><p>Handle <code>interrupt</code> (abort), <code>transferToHuman</code> → <code>end</code> + <code>&lt;Dial&gt;</code>, and mark the human busy using the existing logic.</p></div></li>
+    <li><div><strong>After-call analytics</strong><p>On hang-up, use <code>generateText</code> + <code>Output.object</code> to produce a summary, "resolved?" and a category, then write them to <code>calls</code>. Add a resolution rate and cost per call to the analytics page.</p></div></li>
+    <li><div><strong>Deploy</strong><p>Next.js on Vercel. <code>voice-server</code> on Fly/Railway in US-East. Add rate limits and Twilio signature checks. Test with 10 scripted calls.</p></div></li>
+  </ol>
+</section>
+
+<section id="risks">
+  <h2><span class="n">10</span>Risks, conflicts and gaps</h2>
+  <ul>
+    <li><strong>No official AI SDK + Twilio example exists.</strong> Twilio's ConversationRelay samples use other SDKs. The glue code above is ours to write and test.</li>
+    <li><strong>Latency is unproven</strong> for this stack. Twilio publishes no ConversationRelay latency figures, and vendor claims (Vapi &lt;600ms, Bland &lt;400ms) are their own. Measure it in step 3.</li>
+    <li><strong>Vercel WebSockets are beta</strong> and cap call length, which is why the voice server is separate.</li>
+    <li><strong>Prices move.</strong> All figures were observed 2026-09-25. Retell's "$0.07/min" floor couldn't be reproduced from its own listed parts, and Bland's figure on third-party blogs (~$0.09) is out of date.</li>
+    <li><strong>Model names in vendor docs</strong> (e.g. on Retell's page) were not checked against the model providers. Check the live model list before hard-coding.</li>
+    <li><strong>The hosted Supabase project is currently unreachable</strong> (found earlier today), so local development uses the local Supabase stack.</li>
+  </ul>
+</section>
+
+<section id="sources">
+  <h2><span class="n">11</span>Sources</h2>
+  <h3>Pricing (primary, checked 2026-09-25)</h3>
+  <ol class="src">
+    <li><a href="https://elevenlabs.io/pricing/agents">ElevenAgents pricing</a>: plans, $0.08/min, LLM billed separately</li>
+    <li><a href="https://vapi.ai/pricing">Vapi pricing</a>: $0.05/min hosting plus each component</li>
+    <li><a href="https://www.retellai.com/pricing">Retell pricing</a>: per-component builder</li>
+    <li><a href="https://www.bland.ai/pricing">Bland pricing</a>: flat talk/transfer rates</li>
+    <li><a href="https://www.twilio.com/en-us/voice/pricing/us">Twilio Voice pricing (US)</a>: numbers, minutes, ConversationRelay</li>
+    <li><a href="https://developers.openai.com/api/docs/pricing">OpenAI pricing</a>: realtime and transcription tokens</li>
+    <li><a href="https://vercel.com/docs/ai-gateway/pricing">AI Gateway pricing</a></li>
+  </ol>
+  <h3>Platforms &amp; architecture</h3>
+  <ol class="src">
+    <li><a href="https://elevenlabs.io/docs/eleven-agents/overview">ElevenAgents docs</a> · <a href="https://elevenlabs.io/docs/conversational-ai/customization/custom-llm">Custom LLM</a> · <a href="https://elevenlabs.io/docs/eleven-agents/customization/agent-analysis">Conversation analysis</a></li>
+    <li><a href="https://docs.vapi.ai/quickstart/introduction">Vapi docs</a> · <a href="https://www.retellai.com/">Retell</a> · <a href="https://www.bland.ai/">Bland</a> · <a href="https://synthflow.ai/">Synthflow</a> · <a href="https://poly.ai/">PolyAI</a></li>
+    <li><a href="https://www.twilio.com/en-us/blog/developers/best-practices/guide-core-latency-ai-voice-agents">Twilio: core latency in AI voice agents</a>: the latency budget</li>
+    <li><a href="https://www.twilio.com/docs/voice/twiml/connect/conversationrelay">ConversationRelay TwiML</a> · <a href="https://www.twilio.com/docs/voice/conversationrelay/websocket-messages">WebSocket messages</a></li>
+    <li><a href="https://www.twilio.com/docs/voice/media-streams/websocket-messages">Twilio Media Streams messages</a></li>
+    <li><a href="https://developers.openai.com/api/docs/guides/realtime-sip">OpenAI Realtime SIP</a> · <a href="https://developers.openai.com/api/docs/guides/realtime-vad">Realtime VAD</a></li>
+    <li><a href="https://www.twilio.com/en-us/blog/developers/tutorials/product/warm-transfer-openai-realtime-programmable-sip">Twilio: warm transfer from OpenAI Realtime</a></li>
+    <li><a href="https://futureagi.com/blog/cascaded-voice-ai-vs-speech-to-speech-2026/">FutureAGI: cascaded vs speech-to-speech</a> (secondary) · <a href="https://www.destilabs.com/blog/ai-voice-agent-benchmark-2026">DestiLabs benchmark</a> (secondary, unverified)</li>
+  </ol>
+  <h3>Vercel AI SDK &amp; hosting</h3>
+  <ol class="src">
+    <li><a href="https://github.com/vercel/ai/releases">vercel/ai releases</a> and <code>npm view ai</code>: 7.0.114 latest</li>
+    <li><a href="https://vercel.com/blog/ai-sdk-7">AI SDK 7 announcement</a> · <a href="https://ai-sdk.dev/docs/migration-guides/migration-guide-7-0">Migration guide 7.0</a></li>
+    <li><a href="https://ai-sdk.dev/docs/getting-started/nextjs-app-router">Next.js App Router quickstart</a> · <a href="https://ai-sdk.dev/docs/reference/ai-sdk-core/stream-text">streamText reference</a> · <a href="https://ai-sdk.dev/docs/agents/building-agents">Building agents</a></li>
+    <li><a href="https://ai-sdk.dev/docs/ai-sdk-core/transcription">Transcription</a> · <a href="https://ai-sdk.dev/docs/ai-sdk-core/speech">Speech</a> · <a href="https://ai-sdk.dev/docs/ai-sdk-core/realtime">Realtime</a></li>
+    <li><a href="https://vercel.com/docs/functions/websockets">Vercel WebSockets</a> · <a href="https://vercel.com/docs/functions/limitations">Function limits</a> · <a href="https://vercel.com/docs/ai-gateway/modalities/realtime">Gateway realtime</a></li>
+    <li><a href="https://github.com/twilio-samples/conversationrelay-ai-demo">twilio-samples/conversationrelay-ai-demo</a>: a reference for message handling</li>
+  </ol>
+  <h3>Method</h3>
+  <p class="src">Three parallel research agents covered (1) platforms and pricing, (2) architecture, telephony and hosting, and (3) the Vercel AI SDK, using about 80 searches and page reads. The prices behind the recommendation (ElevenLabs, Twilio) and the v7 API names were then re-fetched from the primary pages. Single-source claims are marked in the text.</p>
+</section>
+
+<footer>SmartCallAI · research compiled with the project's <code>deep-research</code> skill · 2026-09-25</footer>
+</main>
+</div>

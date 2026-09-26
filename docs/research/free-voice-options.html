@@ -1,0 +1,173 @@
+<title>Voice Without a Number</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+  :root {
+    --bg: #fafbfb; --surface: #ffffff; --ink: #0c1515; --muted: #566263; --line: #e1e7e7;
+    --accent: #008f73; --accent-soft: #e2f5f0; --warn: #9a5b00; --warn-soft: #fbf1df; --bad: #b3413f; --bad-soft: #fbe9e8;
+    --sans: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    --mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --bg: #0b1111; --surface: #121a1a; --ink: #e8efee; --muted: #9aa8a7; --line: #243030;
+      --accent: #2fd3ae; --accent-soft: #10302a; --warn: #f0b458; --warn-soft: #33260f; --bad: #f08b88; --bad-soft: #3a1c1b;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --bg: #0b1111; --surface: #121a1a; --ink: #e8efee; --muted: #9aa8a7; --line: #243030;
+    --accent: #2fd3ae; --accent-soft: #10302a; --warn: #f0b458; --warn-soft: #33260f; --bad: #f08b88; --bad-soft: #3a1c1b;
+  }
+  * { box-sizing: border-box; }
+  body { background: var(--bg); color: var(--ink); font: 16px/1.6 var(--sans); padding-inline: 16px; padding-block: 0 64px; }
+  .wrap { max-width: 760px; margin: 0 auto; }
+  header { padding-block: 48px 24px; border-bottom: 1px solid var(--line); }
+  .eyebrow { font: 500 12px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+  h1 { font-size: clamp(30px, 5vw, 42px); line-height: 1.1; letter-spacing: -.02em; margin: 14px 0 12px; text-wrap: balance; }
+  h2 { font-size: 22px; letter-spacing: -.01em; margin: 48px 0 12px; text-wrap: balance; }
+  h3 { font-size: 16px; margin: 24px 0 6px; }
+  p, li { max-width: 68ch; }
+  .meta { color: var(--muted); font-size: 14px; }
+  nav { display: flex; flex-wrap: wrap; gap: 6px 16px; padding-block: 16px; font-size: 14px; border-bottom: 1px solid var(--line); }
+  nav a { color: var(--muted); text-decoration: none; }
+  nav a:hover, nav a:focus-visible { color: var(--ink); text-decoration: underline; }
+  a { color: var(--accent); }
+  a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+  .tldr { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 20px 22px; margin-top: 28px; }
+  .tldr ul { margin: 8px 0 0; padding-left: 20px; display: grid; gap: 8px; }
+  .status { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); margin-top: 16px; }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 6px; }
+  .card code { font: 13px var(--mono); color: var(--muted); }
+  .pill { align-self: flex-start; font: 500 12px/1 var(--mono); padding: 5px 8px; border-radius: 999px; }
+  .ok { background: var(--accent-soft); color: var(--accent); }
+  .warn { background: var(--warn-soft); color: var(--warn); }
+  .no { background: var(--bad-soft); color: var(--bad); }
+  .table { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); margin-top: 12px; }
+  table { border-collapse: collapse; width: 100%; min-width: 640px; font-size: 14px; }
+  th, td { text-align: left; vertical-align: top; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+  th { font: 500 12px/1.3 var(--mono); letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
+  tr:last-child td { border-bottom: 0; }
+  td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+  ol.steps { padding-left: 22px; display: grid; gap: 10px; }
+  code { font-family: var(--mono); font-size: .9em; }
+  pre { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; overflow-x: auto; font: 13px/1.5 var(--mono); }
+  .src { font-size: 14px; }
+  .src li { margin-bottom: 6px; }
+  footer { margin-top: 48px; color: var(--muted); font-size: 13px; border-top: 1px solid var(--line); padding-top: 16px; }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">SmartCallAI · deep research · 25 Sep 2026</div>
+    <h1>Talking to the AI without paying for a phone number</h1>
+    <p class="meta">About 30 sources, official pricing and docs pages fetched directly. Confidence: high for the in-app route and Twilio's trial rules, medium for the other providers' trials.</p>
+  </header>
+
+  <nav aria-label="Sections">
+    <a href="#tldr">Summary</a><a href="#built">What works now</a><a href="#compare">Options compared</a><a href="#twilio">Twilio trial</a><a href="#next">What you need to do</a><a href="#gaps">Unknowns</a><a href="#sources">Sources</a>
+  </nav>
+
+  <section class="tldr" id="tldr" aria-label="Summary">
+    <strong>Summary</strong>
+    <ul>
+      <li><strong>You don't need a phone number to launch.</strong> SmartCallAI now has a voice call inside the web app at <code>/call</code>. It uses the same AI agent as the phone line and costs only OpenAI usage: speech-to-text is $0.003 per minute, plus a little for the voice and the model.</li>
+      <li><strong>Twilio's free trial fits our design.</strong> It has no card requirement, 75 voice minutes and 30 days. Speech recognition (<code>&lt;Gather&gt;</code>) and <code>&lt;Say&gt;</code> are included, and those are exactly what our new Twilio routes use. Recording, audio streaming and ConversationRelay are blocked on trial.</li>
+      <li><strong>The Twilio trial has two limits.</strong> Only verified phone numbers can call, up to 5. Calls are limited to your sign-up country, so a Kenyan account calling a US trial number may be refused.</li>
+      <li><strong>Browser calling through Twilio needs no number at all</strong> ($0.004/min). Twilio doesn't say whether it works on a trial, so we'll find out when you sign up.</li>
+      <li>LiveKit, Vapi and ElevenLabs give a free US number or free minutes. Each would replace our AI SDK agent with their own, so they don't fit what you asked for.</li>
+    </ul>
+  </section>
+
+  <h2 id="built">What works now</h2>
+  <p>I built and tested all three. Each tile says how it was tested.</p>
+  <div class="status">
+    <div class="card"><span class="pill ok">working · free</span><strong>In-app voice call</strong><span>Open <code>/call</code>, press Start voice call, and talk. The AI speaks back, solves the problem or hands off, and logs the call.</span><code>tested in Chrome with a fake mic, desktop + 390px</code></div>
+    <div class="card"><span class="pill ok">ready · needs account</span><strong>Twilio phone line</strong><span>Webhooks at <code>/api/voice/twilio</code> using <code>&lt;Gather&gt;</code> speech, with Twilio signature checks.</span><code>tested with signed simulated calls</code></div>
+    <div class="card"><span class="pill warn">ready · needs number</span><strong>Africa's Talking line</strong><span>Unchanged. Use it when there's budget for a Kenyan number.</span><code>tested with simulated calls</code></div>
+  </div>
+
+  <h2 id="compare">Options compared</h2>
+  <p>Prices were observed on the vendors' own pages on 25 Sep 2026. "Fits" means it works with our AI SDK agent and Next.js routes, with no Python and no replacement agent.</p>
+  <div class="table" role="region" aria-label="Comparison of free voice options" tabindex="0">
+    <table>
+      <thead><tr><th>Option</th><th>Free part</th><th>Phone number?</th><th>Fits our stack</th><th>Main catch</th></tr></thead>
+      <tbody>
+        <tr><td><strong>In-app voice (built)</strong></td><td>No telecom fee. STT <span class="num">$0.003/min</span></td><td>None</td><td><span class="pill ok">yes</span></td><td>Turn-based, 5–11s per reply</td></tr>
+        <tr><td><strong>Twilio trial + &lt;Gather&gt;</strong></td><td class="num">75 min, 30 days, no card</td><td>Trial number assigned</td><td><span class="pill ok">yes (built)</span></td><td>Verified callers only, sign-up country only</td></tr>
+        <tr><td>Twilio browser SDK</td><td class="num">$0.004/min (paid)</td><td>None</td><td><span class="pill ok">yes</span></td><td>Unclear if it works on trial</td></tr>
+        <tr><td>Plivo</td><td class="num">$10 credit, no card</td><td>Unverified</td><td><span class="pill warn">possible</span></td><td>No Kenya on pricing page; trial browser SDK unverified</td></tr>
+        <tr><td>Telnyx</td><td class="num">$5 trial credit</td><td>1 local number (trial)</td><td><span class="pill warn">possible</span></td><td>Card needed for voice; bigger build</td></tr>
+        <tr><td>SignalWire</td><td>Trial mode</td><td>1 number</td><td><span class="pill no">poor</span></td><td>Trial blocks SIP and app traffic</td></tr>
+        <tr><td>LiveKit Cloud</td><td class="num">1,000 agent min, 1 free US number</td><td>Free US (inbound)</td><td><span class="pill no">no</span></td><td>Their agent runtime, not our routes</td></tr>
+        <tr><td>Vapi</td><td class="num">$5 credit, free web calls</td><td>1 free US (inbound)</td><td><span class="pill no">no</span></td><td>Replaces our agent; $0.05/min platform fee</td></tr>
+        <tr><td>ElevenLabs Agents</td><td class="num">15 min/month</td><td>Bring your own</td><td><span class="pill no">no</span></td><td>$0.08/min after; not commercial on free</td></tr>
+        <tr><td>Africa's Talking</td><td>Voice sandbox doesn't work</td><td>Required (KES 5,000 + 2,000/mo)*</td><td><span class="pill ok">yes (built)</span></td><td>Costs money up front</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="meta">* Africa's Talking prices are quoted from a competitor's blog; AT's own pricing page blocked automated access.</p>
+
+  <h2 id="twilio">What Twilio's free trial allows</h2>
+  <p>From Twilio's trial docs, last updated 23 Sep 2026:</p>
+  <ul>
+    <li><strong>Free units:</strong> 75 call minutes, 100 SMS, and text-to-speech and speech recognition marked "Included". No credit card, and the trial ends 30 days after sign-up.</li>
+    <li><strong>Who can call:</strong> only verified numbers, up to 5, and your own number is verified at sign-up. Inbound calls to a trial number must also come from verified numbers.</li>
+    <li><strong>Where:</strong> "SMS messages and voice calls are restricted to your sign-up country." Up to 5 calls at once.</li>
+    <li><strong>Allowed on trial:</strong> <code>&lt;Say&gt;</code>, <code>&lt;Gather&gt;</code>, <code>&lt;Play&gt;</code>, <code>&lt;Hangup&gt;</code>, <code>&lt;Redirect&gt;</code>.</li>
+    <li><strong>Blocked on trial:</strong> <code>&lt;Record&gt;</code>, <code>&lt;Stream&gt;</code>, <code>&lt;ConversationRelay&gt;</code>, and <code>&lt;Dial&gt;</code> to a phone number. On trial, a hand-off to a human agent will say "connecting you" but can't ring them.</li>
+    <li><strong>After upgrading (pay as you go):</strong> US number $1.15/mo, inbound $0.0085/min, <code>&lt;Gather&gt;</code> speech $0.02 per use, ConversationRelay $0.07/min, browser calls $0.004/min. A Kenyan Twilio number is $16/mo, and calls to Kenya are about $0.38–0.39/min.</li>
+  </ul>
+  <p class="meta">Older Help Center pages and blogs still describe a "$15 trial credit". The current docs page lists free units instead, and I went with the current page.</p>
+
+  <h2 id="next">What you need to do</h2>
+  <ol class="steps">
+    <li><strong>Now, free:</strong> share <code>/call</code>. Once the app is deployed, anyone with a browser and a microphone can talk to the AI.</li>
+    <li><strong>Try a real phone call with Twilio:</strong>
+      <ol>
+        <li>Create the account yourself at twilio.com; no card is needed.</li>
+        <li>Put <code>TWILIO_AUTH_TOKEN</code> and <code>PUBLIC_BASE_URL</code> in <code>.env.local</code>.</li>
+        <li>Expose the app with a tunnel: <code>cloudflared tunnel --url http://localhost:3100</code>.</li>
+        <li>On the trial number, set "A call comes in" to <code>POST https://&lt;tunnel&gt;/api/voice/twilio</code> and "Call status changes" to <code>/api/voice/twilio/status</code>.</li>
+        <li>Call it from your verified phone.</li>
+      </ol>
+    </li>
+    <li><strong>If Kenya-to-US calling is refused on trial:</strong> try browser calling through Twilio. Create an API key and a TwiML App pointing at <code>/api/voice/twilio</code>, then set the four <code>TWILIO_*</code> browser variables. <code>/api/voice/twilio/token</code> already issues the access token. The browser button is the next thing to build once your account exists, because I couldn't test it without one.</li>
+    <li><strong>Later, with budget:</strong> a Kenyan number from Africa's Talking (already built), or upgrade Twilio. The AI agent code doesn't change either way.</li>
+  </ol>
+
+  <h2 id="gaps">Unknowns</h2>
+  <ul>
+    <li>Whether Twilio browser calls work on a trial account. Twilio doesn't say; the only way to know is to try.</li>
+    <li>Whether a Kenyan-registered trial can call its assigned trial number. The country rule suggests not.</li>
+    <li>The trial announcement message older docs mention doesn't appear on current pages.</li>
+    <li>Plivo and Telnyx: whether their browser SDKs work on trial accounts.</li>
+    <li>Africa's Talking's official 2026 Kenya pricing.</li>
+  </ul>
+
+  <h2 id="sources">Sources</h2>
+  <ol class="src">
+    <li><a href="https://www.twilio.com/docs/usage/trials">Twilio: Trial account</a>: free units, verified-only calling, country limit, 30 days, no card.</li>
+    <li><a href="https://www.twilio.com/docs/usage/trials/try-out-voice">Twilio: Try out Voice</a>: TwiML allowed and blocked on trial, 5 concurrent calls.</li>
+    <li><a href="https://www.twilio.com/en-us/changelog/inbound-calls-to-trial-accounts-must-use-verified-callerid">Twilio changelog: inbound calls on trial must be verified</a> (2023).</li>
+    <li><a href="https://www.twilio.com/en-us/voice/pricing/us">Twilio Voice pricing, US</a> and <a href="https://www.twilio.com/en-us/voice/pricing/ke">Kenya</a>: per-minute, number, Gather and ConversationRelay prices.</li>
+    <li><a href="https://www.twilio.com/docs/voice/sdks/javascript">Twilio Voice JavaScript SDK</a> and <a href="https://www.twilio.com/en-us/blog/developers/tutorials/product/voice-ai-conversationrelay-twilio-voice-sdk">ConversationRelay + Voice SDK tutorial</a>: browser calling without a number.</li>
+    <li><a href="https://www.twilio.com/docs/voice/twiml/gather">Twilio: &lt;Gather&gt;</a>: speech input, SpeechResult, 60-second maximum.</li>
+    <li><a href="https://ai-sdk.dev/docs/ai-sdk-core/transcription">AI SDK: Transcription</a> and <a href="https://ai-sdk.dev/docs/ai-sdk-core/speech">Speech</a>: <code>transcribe</code> and <code>generateSpeech</code>, stable in v7.</li>
+    <li><a href="https://vercel.com/changelog/ai-sdk-7">Vercel: AI SDK 7 is now available</a> (25 Jun 2026).</li>
+    <li><a href="https://developers.openai.com/api/docs/pricing">OpenAI API pricing</a>: gpt-4o-mini-transcribe $0.003/min, TTS and realtime token prices.</li>
+    <li><a href="https://www.plivo.com/voice/pricing/">Plivo Voice pricing</a>: $10 free credit, browser SDK $0.0033/min.</li>
+    <li><a href="https://developers.telnyx.com/docs/account-setup/levels-and-capabilities/trial">Telnyx trial</a> and <a href="https://telnyx.com/pricing/call-control">Telnyx pricing</a>: $5 credit, browser calling $0.002/min.</li>
+    <li><a href="https://signalwire.com/docs/platform/trial-mode">SignalWire trial mode</a>: SIP and app traffic blocked on trial.</li>
+    <li><a href="https://livekit.com/pricing">LiveKit pricing</a> and <a href="https://docs.livekit.io/telephony/start/phone-numbers/">phone numbers</a>: 1,000 free agent minutes, 1 free US number.</li>
+    <li><a href="https://vapi.ai/pricing">Vapi pricing</a> and <a href="https://docs.vapi.ai/free-telephony">free numbers</a>: $5 credit, 1 free US number, free web calls.</li>
+    <li><a href="https://elevenlabs.io/pricing/agents">ElevenLabs Agents pricing</a>: 15 free minutes, $0.08/min.</li>
+    <li><a href="https://help.africastalking.com/en/articles/11532610-voice-sandbox">Africa's Talking: Voice sandbox</a>: "the sandbox is not operational" for voice.</li>
+    <li><a href="https://sautikit.com/blog/africas-talking-alternatives-kenya">SautiKit blog</a>: AT Kenya prices as quoted by a competitor (treat with caution).</li>
+  </ol>
+
+  <footer>
+    Method: three parallel research passes covering (1) Twilio's trial and browser calling, (2) Telnyx, Vonage, Plivo, SignalWire, Africa's Talking, SautiKit and Zadarma, and (3) in-app voice options and per-minute costs. Official pricing and docs pages were fetched directly. Where sources disagreed, both are noted above. Vonage and some Help Center pages blocked automated access.
+  </footer>
+</div>
