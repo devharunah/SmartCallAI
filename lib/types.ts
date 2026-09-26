@@ -32,8 +32,16 @@ export interface Call {
   assignedAgentId: string | null;
   assignedAgentName: string | null;
   routingTimeMs: number | null;
+  channel: CallChannel;
+  callerNumber: string | null;
+  resolution: CallResolution | null;
+  durationSeconds: number | null;
   createdAt: string;
 }
+
+// web = typed/Web Speech router, phone = a real phone call, app = in-app voice call.
+export type CallChannel = "web" | "phone" | "app";
+export type CallResolution = "resolved" | "transferred" | "abandoned";
 
 export interface ClassificationResult {
   category: Category;
