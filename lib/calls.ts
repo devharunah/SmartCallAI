@@ -1,5 +1,5 @@
 import { supabase } from "./supabase";
-import type { Call, Category } from "./types";
+import type { Call, CallChannel, CallResolution, Category } from "./types";
 
 interface CallRow {
   id: string;
@@ -11,6 +11,10 @@ interface CallRow {
   assigned_agent_id: string | null;
   assigned_agent_name: string | null;
   routing_time_ms: number | null;
+  channel: string;
+  caller_number: string | null;
+  resolution: string | null;
+  duration_seconds: number | null;
   created_at: string;
 }
 
@@ -25,6 +29,10 @@ function toCall(row: CallRow): Call {
     assignedAgentId: row.assigned_agent_id,
     assignedAgentName: row.assigned_agent_name,
     routingTimeMs: row.routing_time_ms,
+    channel: (row.channel ?? "web") as CallChannel,
+    callerNumber: row.caller_number ?? null,
+    resolution: (row.resolution ?? null) as CallResolution | null,
+    durationSeconds: row.duration_seconds ?? null,
     createdAt: row.created_at,
   };
 }
@@ -37,7 +45,13 @@ export async function recordCall(input: {
   reason: string;
   assignedAgentId: string | null;
   assignedAgentName: string | null;
-  routingTimeMs: number;
+  routingTimeMs: number | null;
+  // Phone calls only; web calls fall back to the column defaults.
+  channel?: CallChannel;
+  callerNumber?: string | null;
+  sessionId?: string | null;
+  resolution?: CallResolution | null;
+  durationSeconds?: number | null;
 }): Promise<Call> {
   const { data, error } = await supabase
     .from("calls")
@@ -50,6 +64,13 @@ export async function recordCall(input: {
       assigned_agent_id: input.assignedAgentId,
       assigned_agent_name: input.assignedAgentName,
       routing_time_ms: input.routingTimeMs,
+      ...(input.channel && {
+        channel: input.channel,
+        caller_number: input.callerNumber ?? null,
+        session_id: input.sessionId ?? null,
+        resolution: input.resolution ?? null,
+        duration_seconds: input.durationSeconds ?? null,
+      }),
     })
     .select()
     .single();
@@ -107,11 +128,11 @@ export async function getAnalytics(): Promise<Analytics> {
       ? Math.round(calls.reduce((sum, c) => sum + c.confidence, 0) / calls.length)
       : 0;
 
+  // Phone calls have no routing step (the AI answers directly), so they are left out.
+  const routed = calls.filter((c) => c.routingTimeMs !== null);
   const avgRoutingTimeMs =
-    calls.length > 0
-      ? Math.round(
-          calls.reduce((sum, c) => sum + (c.routingTimeMs ?? 0), 0) / calls.length
-        )
+    routed.length > 0
+      ? Math.round(routed.reduce((sum, c) => sum + (c.routingTimeMs ?? 0), 0) / routed.length)
       : 0;
 
   return {
