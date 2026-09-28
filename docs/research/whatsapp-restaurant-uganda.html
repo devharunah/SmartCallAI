@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WhatsApp Ordering, Uganda</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+  :root {
+    --bg: #fafbfb; --surface: #ffffff; --ink: #0c1515; --muted: #566263; --line: #e1e7e7;
+    --accent: #008f73; --accent-soft: #e2f5f0; --warn: #9a5b00; --warn-soft: #fbf1df; --bad: #b3413f; --bad-soft: #fbe9e8;
+    --sans: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    --mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --bg: #0b1111; --surface: #121a1a; --ink: #e8efee; --muted: #9aa8a7; --line: #243030;
+      --accent: #2fd3ae; --accent-soft: #10302a; --warn: #f0b458; --warn-soft: #33260f; --bad: #f08b88; --bad-soft: #3a1c1b;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --bg: #0b1111; --surface: #121a1a; --ink: #e8efee; --muted: #9aa8a7; --line: #243030;
+    --accent: #2fd3ae; --accent-soft: #10302a; --warn: #f0b458; --warn-soft: #33260f; --bad: #f08b88; --bad-soft: #3a1c1b;
+  }
+  * { box-sizing: border-box; }
+  body { background: var(--bg); color: var(--ink); font: 16px/1.6 var(--sans); padding-inline: 16px; padding-block: 0 64px; margin: 0; }
+  .wrap { max-width: 760px; margin: 0 auto; }
+  header { padding-block: 48px 24px; border-bottom: 1px solid var(--line); }
+  .eyebrow { font: 500 12px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+  h1 { font-size: clamp(30px, 5vw, 42px); line-height: 1.1; letter-spacing: -.02em; margin: 14px 0 12px; text-wrap: balance; }
+  h2 { font-size: 22px; letter-spacing: -.01em; margin: 48px 0 12px; text-wrap: balance; }
+  h3 { font-size: 16px; margin: 24px 0 6px; }
+  p, li { max-width: 68ch; }
+  .meta { color: var(--muted); font-size: 14px; }
+  nav { display: flex; flex-wrap: wrap; gap: 6px 16px; padding-block: 16px; font-size: 14px; border-bottom: 1px solid var(--line); position: sticky; top: 0; background: var(--bg); z-index: 1; }
+  nav a { color: var(--muted); text-decoration: none; }
+  nav a:hover, nav a:focus-visible { color: var(--ink); text-decoration: underline; }
+  a { color: var(--accent); }
+  a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+  .tldr { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 20px 22px; margin-top: 28px; }
+  .tldr ul { margin: 8px 0 0; padding-left: 20px; display: grid; gap: 8px; }
+  .pill { display: inline-block; font: 500 12px/1 var(--mono); padding: 5px 8px; border-radius: 999px; white-space: nowrap; }
+  .ok { background: var(--accent-soft); color: var(--accent); }
+  .warn { background: var(--warn-soft); color: var(--warn); }
+  .no { background: var(--bad-soft); color: var(--bad); }
+  .table { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); margin-top: 12px; }
+  table { border-collapse: collapse; width: 100%; min-width: 640px; font-size: 14px; }
+  th, td { text-align: left; vertical-align: top; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+  th { font: 500 12px/1.3 var(--mono); letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
+  tr:last-child td { border-bottom: 0; }
+  td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+  code { font-family: var(--mono); font-size: .9em; }
+  .src { font-size: 14px; }
+  .src li { margin-bottom: 6px; }
+  footer { margin-top: 48px; color: var(--muted); font-size: 13px; border-top: 1px solid var(--line); padding-top: 16px; }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Emmere · deep research · 29 Sep 2026</div>
+    <h1>A WhatsApp ordering assistant for Ugandan restaurants</h1>
+    <p class="meta">About 60 sources from six research passes. Official docs and pricing pages were fetched directly where they loaded. Confidence: high for the WhatsApp mechanics and Luganda language support, medium for prices after 1 Oct 2026, low for local competitors' fees, which aren't published.</p>
+  </header>
+
+  <nav aria-label="Sections">
+    <a href="#tldr">Summary</a><a href="#wa">WhatsApp cost</a><a href="#luganda">Luganda</a><a href="#ai">AI cost</a><a href="#market">Market</a><a href="#pay">Payments</a><a href="#law">Law</a><a href="#build">Build choices</a><a href="#gaps">Unknowns</a><a href="#sources">Sources</a>
+  </nav>
+
+  <section class="tldr" id="tldr" aria-label="Summary">
+    <strong>Summary</strong>
+    <ul>
+      <li><strong>WhatsApp is close to free, but not completely.</strong> The Cloud API itself costs nothing and no reseller is needed. From 1 Oct 2026, each number gets 1,000 free service replies a month, and each reply after that costs about <span class="num">$0.004</span> in Uganda. A busy restaurant sending 3,000 replies a month would pay about $8.</li>
+      <li><strong>"Meta AI" isn't the free part.</strong> Meta Business Agent costs $2 per million tokens through the API, which works out to about 4–5¢ per message, and it's limited to eligible partners. Our own AI agent costs under 1¢ for a whole order conversation.</li>
+      <li><strong>Luganda works, through a Ugandan provider.</strong> Whisper, OpenAI, Groq and Azure don't support Luganda speech. Sunbird AI does: it has a Luganda speech-to-text API that accepts WhatsApp's OGG audio and has a free developer tier. ElevenLabs Scribe is the paid fallback.</li>
+      <li><strong>Nobody local does this yet.</strong> Jumia Food left Uganda in 2023. Glovo and SafeBoda take commission. The one AI WhatsApp agent aimed at Uganda, HustleFlow ($15–100/mo), isn't built for restaurants and doesn't mention Luganda.</li>
+      <li><strong>Two rules to follow.</strong> WhatsApp bans general-purpose AI chatbots, so the bot must stay on the menu and orders. Uganda's data law requires registration with its data protection office (UGX 100,000 a year) and consent before chats are stored abroad.</li>
+    </ul>
+  </section>
+
+  <h2 id="wa">What WhatsApp costs in Uganda</h2>
+  <p>Uganda (+256) is billed in Meta's "Rest of Africa" market. Meta charges per delivered message, by category.</p>
+  <div class="table" role="region" aria-label="WhatsApp rates for Uganda" tabindex="0">
+    <table>
+      <thead><tr><th>Message type</th><th>When it's used</th><th>Price</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Service</strong> (free-form reply)</td><td>Bot replies within 24h of the customer's last message</td><td class="num">1,000 free/number/month, then ~$0.004</td><td>Free until 30 Sep 2026. Charged from 1 Oct.</td></tr>
+        <tr><td><strong>Utility template</strong></td><td>Order updates outside the 24h window</td><td class="num">~$0.004</td><td>Inside the window, now also charged from 1 Oct.</td></tr>
+        <tr><td><strong>Marketing template</strong></td><td>Promotions and broadcasts</td><td class="num">~$0.0225</td><td>No volume discount.</td></tr>
+        <tr><td><strong>Free entry point</strong></td><td>Customer came from a Click-to-WhatsApp ad</td><td class="num">free for 72h</td><td>Still free after 1 Oct.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="meta">The Rest of Africa rates are from partner rate cards (360dialog, Whautomate, EngageLab), because Meta's CSV wouldn't load. The 1,000 free replies figure is confirmed by 360dialog, SendPulse and respond.io. Meta's main pricing page, as fetched, still says service replies are free, so check again after 1 Oct.</p>
+  <h3>Limits that shape the build</h3>
+  <ul>
+    <li><strong>Test number:</strong> Meta's free test number can message about 5 verified phones. That's enough for us to test, but not for a public demo, so we're building a web simulator for that.</li>
+    <li><strong>New accounts</strong> start at 250 business-initiated conversations a day. Replying to customers who message first isn't limited this way.</li>
+    <li><strong>Each restaurant on its own number</strong> requires Meta's Tech Provider programme (business verification and app review) plus Embedded Signup. The default cap is 10 new customers a week, or 200 after verification.</li>
+    <li><strong>Coexistence</strong> lets a restaurant keep using its existing WhatsApp Business app number alongside the API. It also requires Tech Provider status, and catalogs and orders don't work on those numbers.</li>
+    <li><strong>No official Node SDK:</strong> Meta archived it in 2023, so we call the Graph API with <code>fetch</code>.</li>
+    <li><strong>Voice notes</strong> arrive as <code>audio/ogg; codecs=opus</code>. The media download link expires after 5 minutes.</li>
+    <li><strong>Menus as messages:</strong> list messages take up to 10 rows and reply buttons up to 3. Images must be JPEG or PNG, up to 5 MB.</li>
+  </ul>
+  <h3>The AI chatbot rule</h3>
+  <p>Since 15 Jan 2026, WhatsApp's terms bar AI providers whose assistant is the "primary functionality", meaning ChatGPT-style bots that answer anything. AI that's "ancillary to a legitimate business service" is allowed: confirming orders, tracking, bookings and FAQs. Our bot has to politely refuse anything that isn't about the restaurant.</p>
+
+  <h2 id="luganda">Luganda: which services actually support it</h2>
+  <div class="table" role="region" aria-label="Luganda speech-to-text support" tabindex="0">
+    <table>
+      <thead><tr><th>Service</th><th>Luganda?</th><th>Accepts WhatsApp OGG?</th><th>Accuracy (Luganda WER, lower is better)</th><th>Price</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Sunbird AI</strong> (Uganda)</td><td><span class="pill ok">yes, <code>lug</code></span></td><td>yes</td><td class="num">0.16 (AfriVox) – 0.30 (own benchmark)</td><td>Free developer tier, commercial on request</td></tr>
+        <tr><td>ElevenLabs Scribe v2</td><td><span class="pill ok">yes</span></td><td>yes</td><td>"Moderate", 25–50%</td><td class="num">$0.22/hour</td></tr>
+        <tr><td>Google Chirp 2</td><td><span class="pill ok">yes, <code>lg-UG</code></span></td><td>needs checking</td><td>not published</td><td>not retrieved</td></tr>
+        <tr><td>Gemini (audio in the prompt)</td><td><span class="pill warn">works, weaker</span></td><td>yes</td><td class="num">0.315 (Gemini 3 Flash, AfriVox)</td><td>~$0.0006/min</td></tr>
+        <tr><td>Meta Omnilingual ASR</td><td><span class="pill warn">yes, self-host only</span></td><td>—</td><td>not published for Luganda</td><td>Free weights, you run the GPU</td></tr>
+        <tr><td>OpenAI Whisper / gpt-4o-transcribe</td><td><span class="pill no">no</span></td><td>no</td><td>—</td><td>—</td></tr>
+        <tr><td>Groq Whisper</td><td><span class="pill no">no</span></td><td>yes</td><td>—</td><td>—</td></tr>
+        <tr><td>Azure, Deepgram</td><td><span class="pill no">no</span></td><td>—</td><td>—</td><td>—</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>Sunbird can't reliably detect the language by itself. You tell it <code>lug</code> or <code>eng</code> for each clip. So the app remembers each customer's language from their texts and retries with the other language if the transcript comes back empty.</p>
+  <h3>Reading and writing Luganda</h3>
+  <p>Scores from the Sunflower paper (chrF, higher is better):</p>
+  <div class="table" role="region" aria-label="LLM translation quality in Luganda" tabindex="0">
+    <table>
+      <thead><tr><th>Model</th><th>Luganda → English (understanding)</th><th>English → Luganda (writing)</th></tr></thead>
+      <tbody>
+        <tr><td>Gemini 2.5 Pro</td><td class="num">0.632</td><td class="num">0.573</td></tr>
+        <tr><td>Sunflower 32B (Sunbird)</td><td class="num">0.596</td><td class="num">0.567</td></tr>
+        <tr><td>GPT-4o</td><td class="num">0.606</td><td class="num">0.472</td></tr>
+        <tr><td>Grok 3</td><td class="num">0.577</td><td class="num">0.438</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>All the major models understand Luganda reasonably well. Gemini and Sunflower write it noticeably better than GPT-4o. Sunflower has an OpenAI-compatible API, but its docs don't mention tool calling, so it can't take orders on its own. We use Gemini Flash as the main model and keep Sunflower as an optional "make this sound natural in Luganda" pass. No published benchmark covers the cheaper Flash and mini models in Luganda, so we'll test our own set of about 30 real messages.</p>
+  <p><strong>Luganda voice replies</strong> for later: Sunbird has a text-to-speech API with 8 Luganda voices. Meta's MMS-TTS is licensed for non-commercial use only.</p>
+
+  <h2 id="ai">What the AI costs per order</h2>
+  <p>Estimate for one conversation of about 15 messages (about 8 model calls, about 32k input and 1.5k output tokens):</p>
+  <div class="table" role="region" aria-label="LLM cost per conversation" tabindex="0">
+    <table>
+      <thead><tr><th>Model</th><th>Price per 1M tokens (in / out)</th><th>Per conversation</th></tr></thead>
+      <tbody>
+        <tr><td>GPT-5-nano</td><td class="num">$0.05 / $0.40</td><td class="num">~$0.002</td></tr>
+        <tr><td>Gemini 2.5 Flash-Lite</td><td class="num">$0.10 / $0.40</td><td class="num">~$0.004</td></tr>
+        <tr><td>GPT-4o-mini (current code)</td><td class="num">$0.15 / $0.60</td><td class="num">~$0.006</td></tr>
+        <tr><td>Gemini 2.5 Flash (chosen)</td><td class="num">$0.30 / $2.50</td><td class="num">~$0.013</td></tr>
+        <tr><td>Claude Haiku 4.5</td><td class="num">$1 / $5</td><td class="num">~$0.04</td></tr>
+        <tr><td>Meta Business Agent (API)</td><td class="num">$2 per 1M tokens</td><td class="num">~$0.04–0.05 per message</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="meta">The per-conversation figures are my arithmetic from the published per-token prices. Voice-note transcription adds almost nothing: a 15-second note on ElevenLabs costs about $0.001.</p>
+
+  <h2 id="market">The Ugandan market</h2>
+  <div class="table" role="region" aria-label="Competitors" tabindex="0">
+    <table>
+      <thead><tr><th>Player</th><th>What it is</th><th>Price</th><th>AI? Luganda?</th></tr></thead>
+      <tbody>
+        <tr><td>Glovo</td><td>Delivery marketplace in Kampala, Entebbe and Mukono</td><td>Commission, not published</td><td>No</td></tr>
+        <tr><td>SafeBoda Food</td><td>Boda app with food, 300+ merchants</td><td>Commission, not published</td><td>No</td></tr>
+        <tr><td>Jumia Food</td><td>Exited Uganda, Dec 2023</td><td>—</td><td>—</td></tr>
+        <tr><td>HustleFlow (Nairobi)</td><td>AI WhatsApp sales agent for SMEs, targets Uganda</td><td class="num">$15 / $50 / $100 per month</td><td>AI; Luganda not claimed</td></tr>
+        <tr><td>Take App</td><td>Storefront that sends orders to WhatsApp</td><td class="num">$0 – $50 per month</td><td>No conversational AI</td></tr>
+        <tr><td>OrderOnWhats.app</td><td>AI WhatsApp ordering bot</td><td class="num">$13 – $129 per month</td><td>AI; no East African payments</td></tr>
+        <tr><td>Local POS (Novas, UgaPOS, Ficos)</td><td>Tills and stock</td><td class="num">UGX 21k – 50k per month</td><td>No</td></tr>
+        <tr><td>Meta Business Agent</td><td>Meta's AI inside the WhatsApp Business app</td><td>Free for now</td><td>AI; ordering flow unconfirmed</td></tr>
+        <tr><td>Anota AI (Brazil, iFood)</td><td>WhatsApp AI ordering plus a merged order screen</td><td class="num">R$220 – 330 per month</td><td>Shows the model works at scale</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>Today in Kampala, people call or WhatsApp the restaurant, a boda rider delivers, and they pay by MTN MoMo or cash. The pain for restaurants is re-typing chat orders, missed messages at peak times, and marketplace commission. Where we can stand out:</p>
+  <ul>
+    <li>Luganda voice notes and texts</li>
+    <li>a live order board</li>
+    <li>a bot workflow the owner can edit</li>
+    <li>no commission</li>
+    <li>mobile money later</li>
+  </ul>
+  <p>Pricing anchor: local tools cost about $6–14 a month, and HustleFlow charges $15–50.</p>
+
+  <h2 id="pay">Payments (later phase)</h2>
+  <ul>
+    <li><strong>MTN MoMo Open API:</strong>
+      <ul>
+        <li>Free to join, with a "RequestToPay" collections API.</li>
+        <li>The sandbox only works in <strong>EUR</strong>.</li>
+        <li>Going live needs KYC documents, and forum reports mention broken signup links and upload-size limits.</li>
+        <li>MTN has about 54% of mobile-money subscriptions (unverified).</li>
+      </ul>
+    </li>
+    <li><strong>Airtel Money:</strong> developers.airtel.africa offers collections, with KYC for production. Fees aren't published.</li>
+    <li><strong>Aggregators (fastest path):</strong>
+      <ul>
+        <li>Flutterwave Uganda charges <span class="num">3%</span> on mobile-money collections and 4.8% on cards, with next-day settlement.</li>
+        <li>Relworx covers MTN and Airtel with good docs, but doesn't publish fees.</li>
+        <li>Pesapal is about 3.5%.</li>
+        <li>Yo! Payments needs incorporation papers and an NDA.</li>
+      </ul>
+    </li>
+    <li><strong>Taxes:</strong> a 0.5% mobile-money withdrawal levy, 12% excise on data and 18% VAT. There's no WhatsApp-specific tax; the 2018 social-media tax was replaced in 2021.</li>
+  </ul>
+
+  <h2 id="law">Data protection</h2>
+  <ul>
+    <li><strong>Registration:</strong> the Data Protection and Privacy Act 2019 (s.29) requires every data collector, processor and controller to register with the PDPO, whatever its size. It costs <span class="num">UGX 100,000</span> and is renewed every year. The first conviction for not registering came in July 2025, a UGX 300,000 fine.</li>
+    <li><strong>Data abroad:</strong> s.19 requires protection at least equal to Ugandan law, plus consent, when data leaves Uganda. The PDPO found Google in breach in July 2025. Our chats live in Supabase and pass through US AI providers, so the bot's first message includes a short consent line and a link to the privacy notice.</li>
+    <li>This is research, not legal advice. Restaurants using the platform may need to register too.</li>
+  </ul>
+
+  <h2 id="build">Build choices that follow from this</h2>
+  <ul>
+    <li><strong>Transport:</strong> WhatsApp Cloud API directly, with no BSP, one number for now, and a web simulator as the public demo.</li>
+    <li><strong>Brain:</strong> our own AI SDK agent that follows an editable workflow graph, using Gemini 2.5 Flash through the Vercel AI Gateway with GPT-4o-mini as fallback. Prices and totals always come from the database, never from the model.</li>
+    <li><strong>Voice notes:</strong> Sunbird first (<code>lug</code> or <code>eng</code>), then ElevenLabs Scribe, then "please type it".</li>
+    <li><strong>Order alerts:</strong> a Supabase Realtime dashboard with sound and a browser notification. No email service needed.</li>
+    <li><strong>Workflow editor:</strong> <code>@xyflow/react</code> 12 (MIT, React 19) with React Flow UI shadcn components and dagre layout. The nodes and edges follow ElevenLabs' design: stages with their own instructions, and conditions written in plain language.</li>
+  </ul>
+
+  <h2 id="gaps">Unknowns</h2>
+  <ul>
+    <li>Meta's official Rest of Africa rate card after 1 Oct 2026. The partner figures agree with each other, but Meta's page hasn't caught up.</li>
+    <li>Sunbird's rate limits, uptime and commercial pricing. Ask them before launch.</li>
+    <li>How well any speech service handles Luganda–English code-switching. There's no independent benchmark, so we'll test on real notes.</li>
+    <li>How the cheaper Gemini Flash and GPT mini models perform in Luganda. Only the larger Pro and 4o models have been measured.</li>
+    <li>Glovo and SafeBoda's restaurant commission in Uganda, and fees at MTN, Airtel, Relworx and Pesapal.</li>
+    <li>Whether Meta Business Agent is available in Uganda and can take orders.</li>
+  </ul>
+
+  <h2 id="sources">Sources</h2>
+  <ol class="src">
+    <li><a href="https://developers.facebook.com/documentation/business-messaging/whatsapp/pricing">Meta: Pricing on the WhatsApp Business Platform</a>: per-message billing, 24h window, free entry point, regions.</li>
+    <li><a href="https://developers.facebook.com/documentation/business-messaging/whatsapp/pricing/non-template-messages">Meta: Upcoming pricing updates (service messages, Business Agent)</a>: charging from 1 Oct 2026, Business Agent $2/1M tokens.</li>
+    <li><a href="https://360dialog.com/blog/whatsapp-service-message-charging-october-2026/">360dialog: Service message charging starts 1 Oct 2026</a>: 1,000 free per number, $0.0040 Rest of Africa.</li>
+    <li><a href="https://sendpulse.com/blog/whatsapp-service-message-pricing">SendPulse</a> and <a href="https://respond.io/blog/whatsapp-pricing-change-2026">respond.io</a>: confirm the 1,000 free allowance.</li>
+    <li><a href="https://whautomate.com/whatsapp-business-api-pricing">Whautomate</a> and <a href="https://www.engagelab.com/blog/whatsapp-business-api-pricing">EngageLab</a>: Rest of Africa rate card.</li>
+    <li><a href="https://developers.facebook.com/documentation/business-messaging/whatsapp/messaging-limits">Meta: Messaging limits</a> and <a href="https://developers.facebook.com/documentation/business-messaging/whatsapp/business-phone-numbers/phone-numbers">Phone numbers</a>.</li>
+    <li><a href="https://developers.facebook.com/documentation/business-messaging/whatsapp/solution-providers/get-started-for-tech-providers">Meta: Become a Tech Provider</a> and <a href="https://developers.facebook.com/documentation/business-messaging/whatsapp/embedded-signup/onboarding-business-app-users/">Coexistence onboarding</a>.</li>
+    <li><a href="https://developers.facebook.com/documentation/business-messaging/whatsapp/webhooks/reference/messages/audio">Meta: Audio message webhook</a>, <a href="https://developers.facebook.com/documentation/business-messaging/whatsapp/business-phone-numbers/media">Media</a>, <a href="https://developers.facebook.com/documentation/business-messaging/whatsapp/messages/interactive-list-messages">List messages</a>.</li>
+    <li><a href="https://github.com/WhatsApp/WhatsApp-Nodejs-SDK">GitHub: WhatsApp Node.js SDK (archived)</a>.</li>
+    <li><a href="https://techcrunch.com/2025/10/18/whatssapp-changes-its-terms-to-bar-general-purpose-chatbots-from-its-platform">TechCrunch: WhatsApp bars general-purpose chatbots</a> and <a href="https://respond.io/blog/whatsapp-general-purpose-chatbots-ban">respond.io explainer</a>.</li>
+    <li><a href="https://about.fb.com/news/2026/06/meta-business-agent/">Meta Newsroom: Meta Business Agent</a> and <a href="https://techcrunch.com/2026/06/03/metas-ai-agent-for-whatsapp-business-is-now-available-globally/">TechCrunch</a>.</li>
+    <li><a href="https://docs.sunbird.ai/guides/speech-to-text">Sunbird AI: Speech-to-text guide</a>, <a href="https://docs.sunbird.ai/guides/sunflower-chat">Sunflower chat</a>, <a href="https://docs.sunbird.ai/guides/text-to-speech">Text-to-speech</a>.</li>
+    <li><a href="https://huggingface.co/Sunbird/SunflowerASR-51-african-languages">Hugging Face: SunflowerASR-51 model card</a>: Luganda WER on three benchmarks.</li>
+    <li><a href="https://arxiv.org/html/2510.07203">Sunflower paper (arXiv 2510.07203)</a>: Luganda translation scores for Gemini, GPT-4o and Sunflower.</li>
+    <li><a href="https://elevenlabs.io/docs/overview/capabilities/speech-to-text">ElevenLabs: Speech-to-text languages</a> and <a href="https://elevenlabs.io/pricing/api">API pricing</a>.</li>
+    <li><a href="https://raw.githubusercontent.com/openai/whisper/main/whisper/tokenizer.py">Whisper language list</a>: no Luganda. <a href="https://developers.openai.com/api/docs/guides/speech-to-text">OpenAI STT guide</a>: no OGG.</li>
+    <li><a href="https://docs.cloud.google.com/speech-to-text/docs/speech-to-text-supported-languages">Google Cloud STT languages</a>: Chirp 2 <code>lg-UG</code>.</li>
+    <li><a href="https://ai.google.dev/gemini-api/docs/pricing">Gemini API pricing</a>, <a href="https://developers.openai.com/api/docs/pricing">OpenAI pricing</a>, <a href="https://platform.claude.com/docs/en/about-claude/pricing">Claude pricing</a>.</li>
+    <li><a href="https://group.jumia.com/news/jumia-discontinues-food-delivery-across-seven-markets-shifts-focus-to-expanding-physical-goods-business">Jumia: food delivery discontinued in seven markets</a>.</li>
+    <li><a href="https://ortegagroupug.com/2025/05/02/online-food-delivery-market-in-kampala-uganda/">Ortega Group: Kampala food delivery market</a>: how Kampala orders and pays.</li>
+    <li><a href="https://hustle-flow.com/uganda/whatsapp-chatbot">HustleFlow Uganda</a>, <a href="https://www.take.app/pricing">Take App pricing</a>, <a href="https://orderonwhats.app/">OrderOnWhats.app</a>.</li>
+    <li><a href="https://www.mtn.co.ug/helppersonal/mtn-open-api/">MTN Uganda: Open API</a>, <a href="https://developers.airtel.africa/">Airtel Africa developer portal</a>, <a href="https://flutterwave.com/ug/pricing">Flutterwave Uganda pricing</a>, <a href="https://payments.relworx.com/docs">Relworx docs</a>.</li>
+    <li><a href="https://globallawexperts.com/how-to-register-with-pdpo-uganda/">Registering with the PDPO</a> and <a href="https://cipesa.org/2025/07/ugandan-regulator-finds-google-in-breach-of-countrys-data-protection-law-orders-local-registration/">CIPESA on the Google ruling</a>.</li>
+    <li><a href="https://reactflow.dev/ui">React Flow UI</a>, <a href="https://registry.npmjs.org/@xyflow/react/latest">@xyflow/react on npm</a>, <a href="https://elevenlabs.io/docs/agents-platform/customization/agent-workflows">ElevenLabs Agent Workflows</a>.</li>
+  </ol>
+
+  <footer>
+    Method: six parallel research passes, covering (1) WhatsApp Cloud API pricing, limits and policy; (2) competitors and cheap order notifications; (3) the workflow editor, LLM and speech-to-text costs; (4) the Uganda market, payments and law; (5) Luganda speech and language model support; (6) the codebase. Where sources disagree, both are noted. Prices are as seen on 29 Sep 2026 and change quarterly.
+  </footer>
+</div>
+</html>
