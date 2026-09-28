@@ -4,7 +4,7 @@ import { isSupabaseConfigured, requireSupabaseEnv } from "./env";
 
 // The proxy is the optimistic fast path only. The authoritative checks live in
 // app/(protected)/layout.tsx for pages and requireApiUser() for route handlers.
-const PROTECTED_PAGE_PREFIXES = ["/admin", "/analytics"] as const;
+const PROTECTED_PAGE_PREFIXES = ["/admin", "/analytics", "/dashboard", "/onboarding"] as const;
 
 function isProtectedPage(pathname: string) {
   return PROTECTED_PAGE_PREFIXES.some(

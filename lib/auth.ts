@@ -57,7 +57,7 @@ export async function requireApiUser() {
  * Must be applied at every sink, including inside the server action — the hidden
  * form input is attacker-controlled.
  */
-export function safeNextPath(next: unknown, fallback = "/admin"): string {
+export function safeNextPath(next: unknown, fallback = "/dashboard"): string {
   if (typeof next !== "string" || next.length === 0) return fallback;
   if (!next.startsWith("/")) return fallback; // absolute URLs, javascript:, data:
   if (next.startsWith("//")) return fallback; // protocol-relative -> //evil.com

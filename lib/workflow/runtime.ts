@@ -6,7 +6,7 @@ import { cartCount, cartForModel, cartSummary, cartTotals } from "../chat/cart";
 import { t } from "../chat/language";
 import { fallbackChatModel, primaryChatModel } from "../chat/model";
 import { placeOrder } from "../chat/orders";
-import { buildTools, type ToolEffects } from "../chat/tools";
+import { buildTools, searchMenu, type ToolEffects } from "../chat/tools";
 import type { Cart, Conversation, Inbound, OutMessage } from "../chat/types";
 import { evalExpr, type ExprContext } from "./expr";
 import type { WorkflowEdge, WorkflowGraph, WorkflowNode } from "./schema";
@@ -290,11 +290,11 @@ async function runAgent({
   }
 
   const instructions = systemPrompt(restaurant, menu, node, cart, lang, llmEdges.length > 0);
-  const call = (model: ReturnType<typeof fallbackChatModel>, timeoutMs: number) =>
+  const call = (model: ReturnType<typeof fallbackChatModel>, timeoutMs: number, extra: ModelMessage[] = []) =>
     generateText({
       model: model.model,
       instructions,
-      messages: history,
+      messages: [...history, ...extra],
       tools,
       stopWhen: [isStepCount(6), hasToolCall("goto"), hasToolCall("requestHuman")],
       maxOutputTokens: 400,
@@ -319,8 +319,35 @@ async function runAgent({
     result = await call(fallbackChatModel(), 15_000);
   }
 
+  // Models sometimes say "added to your cart" without calling addToCart. The
+  // confirm step would still show the real (empty) cart, but the customer
+  // would be confused, so give the model one nudge to actually do it.
+  const lastUser = history.at(-1);
+  const usedTools = result.steps.some((s) => s.toolCalls.length > 0);
+  if (
+    !usedTools &&
+    !gotoTarget &&
+    (node.data.tools ?? []).includes("addToCart") &&
+    CLAIMS_ADDED.test(result.text) &&
+    typeof lastUser?.content === "string" &&
+    searchMenu(menu.items, lastUser.content).length > 0
+  ) {
+    console.warn("[workflow] reply claimed items were added without addToCart; retrying once");
+    try {
+      const retry = await call(primary ?? fallbackChatModel(), 12_000, [
+        ...result.responseMessages,
+        { role: "user", content: "[system] You replied without calling addToCart, so nothing is in the order yet. Call addToCart now for each item the customer asked for, then reply." },
+      ]);
+      if (retry.steps.some((s) => s.toolCalls.length > 0)) result = retry;
+    } catch (err) {
+      console.error("[workflow] addToCart retry failed", err);
+    }
+  }
+
   return { text: result.text.trim(), gotoTarget, effects, responseMessages: result.responseMessages };
 }
+
+const CLAIMS_ADDED = /(cart|kaadi|added|adding|nteek|nteese|nkusse|nnyongedde|nyongedde|in your order|mu order)/i;
 
 function systemPrompt(
   restaurant: Restaurant,
@@ -350,6 +377,7 @@ Rules (always):
 - Only help with this restaurant: its menu, orders, hours, delivery and payment. Politely decline anything else (general knowledge, homework, coding, news, other businesses) in one sentence and steer back to food.
 - Never invent menu items, prices, discounts, delivery times or promises. Use only the menu below and tool results.
 - Never state an order total. The confirmation step shows the prices.
+- Never say an item is in the order unless addToCart succeeded in this turn.
 - WhatsApp style: short and friendly, one to three sentences, at most one emoji, no headings or tables. Don't greet again once the chat has started.
 - Language: reply in the language of the customer's latest message. If they write Luganda, reply in natural, simple Luganda as spoken in Kampala (English food names and words like "order" are fine). If they mix Luganda and English, you may mix too. The conversation's language so far: ${lang === "lug" ? "Luganda" : "English"}.
 - Messages starting with [voice note] were transcribed from speech and may have errors. If something is unclear, ask.
