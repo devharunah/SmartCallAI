@@ -1,0 +1,21 @@
+{
+  "note": "Starter set written for development. Replace or extend with real messages from Kampala customers, reviewed by a native Luganda speaker, before trusting the score.",
+  "samples": [
+    { "lang": "lug", "text": "Njagala rolex bbiri", "expect": { "Classic Rolex": 2 } },
+    { "lang": "lug", "text": "Mpa luwombo w'enkoko emu n'omubisi gwa passion", "expect": { "Chicken Luwombo": 1, "Fresh passion juice": 1 } },
+    { "lang": "lug", "text": "Nsaba katogo emu ne caayi", "expect": { "Katogo (beef)": 1, "African tea": 1 } },
+    { "lang": "lug", "text": "Njagala pilawo ssatu ne soda bbiri", "expect": { "Beef pilau": 3, "Soda (300ml)": 2 } },
+    { "lang": "lug", "text": "Ndeetera matooke n'ebinyeebwa, n'amazzi", "expect": { "Matooke & groundnut sauce": 1, "Water (500ml)": 1 } },
+    { "lang": "lug", "text": "Mpaako kyapati nnya", "expect": { "Chapati": 4 } },
+    { "lang": "lug", "text": "Njagala ekyennyanja ekyokye kimu ne chips", "expect": { "Grilled tilapia": 1, "Chips": 1 } },
+    { "lang": "lug", "text": "Kawunga n'ebijanjaalo bibiri", "expect": { "Posho & beans": 2 } },
+    { "lang": "mixed", "text": "Boss njagala two rolex special ne coke", "expect": { "Rolex Special": 2, "Soda (300ml)": 1 } },
+    { "lang": "mixed", "text": "Mpa muchomo emu, chips, and one passion juice please", "expect": { "Muchomo (goat)": 1, "Chips": 1, "Fresh passion juice": 1 } },
+    { "lang": "mixed", "text": "Nze njagala beef luwombo ku lunch, plus amazzi abiri", "expect": { "Beef Luwombo": 1, "Water (500ml)": 2 } },
+    { "lang": "mixed", "text": "Chapo ttaano ne chai", "expect": { "Chapati": 5, "African tea": 1 } },
+    { "lang": "eng", "text": "Can I get 2 rolexes and a fanta", "expect": { "Classic Rolex": 2, "Soda (300ml)": 1 } },
+    { "lang": "eng", "text": "One chicken luwombo and two waters please", "expect": { "Chicken Luwombo": 1, "Water (500ml)": 2 } },
+    { "lang": "eng", "text": "I'd like the grilled fish with a passion juice", "expect": { "Grilled tilapia": 1, "Fresh passion juice": 1 } },
+    { "lang": "eng", "text": "3 chapatis and a katogo", "expect": { "Chapati": 3, "Katogo (beef)": 1 } }
+  ]
+}
