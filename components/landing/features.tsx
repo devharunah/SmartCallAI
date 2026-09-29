@@ -1,23 +1,29 @@
-import { BookOpenCheck, ClipboardList, Headset, X } from "lucide-react";
+import { LayoutDashboard, Mic, Workflow, X } from "lucide-react";
+import { BRAND } from "@/lib/brand";
 
 // Adapted from Tailark Mist features-8 (MIT, github.com/tailark/blocks).
-const MENU = ["Press 1 for billing", "Press 2 for internet", "Press 3 for cards", "Press 9 to repeat"];
+const BEFORE = [
+  "Messages missed during the lunch rush",
+  "Orders copied into a notebook by hand",
+  "“Mpa menu” answered forty times a day",
+  "Commission on every delivery-app order",
+];
 
 const FEATURES = [
   {
-    icon: BookOpenCheck,
-    title: "Solves it from your help content",
-    text: "Walks the caller through the fix, like restarting a router or explaining a pending charge. It only says what your knowledge base says.",
+    icon: Mic,
+    title: "Understands Luganda voice notes",
+    text: "Customers order the way they'd message a friend. Voice notes and texts in Luganda or English are understood, and it replies in the same language.",
   },
   {
-    icon: ClipboardList,
-    title: "Opens the follow-up for them",
-    text: "Refunds, technician visits, callbacks and card unblocks are logged during the call, and the caller hears the reference number.",
+    icon: LayoutDashboard,
+    title: "Orders land on a live board",
+    text: "Each new order chimes on your phone or laptop with the items, total and delivery area. Accept it, cook it, send it, and the customer gets an update.",
   },
   {
-    icon: Headset,
-    title: "Hands off with context",
-    text: "When someone asks for a person, or the issue needs one, it dials the right available agent and passes along a one-line summary.",
+    icon: Workflow,
+    title: "You decide how it behaves",
+    text: "See your assistant as a diagram. Change what it says, when it hands over to your staff, or add a step. No code.",
   },
 ];
 
@@ -26,11 +32,9 @@ export function Features() {
     <section id="features" className="scroll-mt-20 py-20 md:py-24">
       <div className="mx-auto w-full max-w-5xl px-6">
         <div className="max-w-2xl">
-          <h2 className="text-3xl font-semibold tracking-tight text-balance md:text-4xl">
-            It fixes the problem instead of routing it
-          </h2>
+          <h2 className="text-3xl font-semibold tracking-tight text-balance md:text-4xl">Orders come in by themselves</h2>
           <p className="mt-4 text-lg text-pretty text-muted-foreground">
-            Menus make callers do the sorting. SmartCall listens once and does the work.
+            Your customers already message you on WhatsApp. {BRAND.name} answers every one of them, straight away.
           </p>
         </div>
 
@@ -39,7 +43,7 @@ export function Features() {
             <div>
               <p className="text-sm font-medium text-muted-foreground">Before</p>
               <ul className="mt-3 space-y-2">
-                {MENU.map((item) => (
+                {BEFORE.map((item) => (
                   <li key={item} className="flex items-center gap-2 text-muted-foreground line-through decoration-foreground/20">
                     <X className="size-4 shrink-0 text-destructive" aria-hidden />
                     {item}
@@ -48,12 +52,11 @@ export function Features() {
               </ul>
             </div>
             <div className="rounded-lg bg-background p-5 ring-1 ring-foreground/10">
-              <p className="text-sm font-medium text-muted-foreground">With SmartCall</p>
-              <p className="mt-3 text-lg font-medium text-pretty">
-                &ldquo;My internet keeps dropping every evening.&rdquo;
-              </p>
+              <p className="text-sm font-medium text-muted-foreground">With {BRAND.name}</p>
+              <p className="mt-3 text-lg font-medium text-pretty">&ldquo;Mpa menu&rdquo;</p>
               <p className="mt-2 text-pretty text-muted-foreground">
-                The AI asks one question, walks through a restart, and books a technician if the line light stays red.
+                The menu arrives as a picture in seconds. The customer picks, confirms the total, and the order is on your board. Nobody had to pick
+                up a phone.
               </p>
             </div>
           </div>

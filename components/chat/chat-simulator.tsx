@@ -216,7 +216,7 @@ export function ChatSimulator({
         <div className="min-w-0 flex-1">
           <p className="truncate text-sm font-semibold">{restaurantName}</p>
           <p className="text-xs text-muted-foreground" aria-live="polite">
-            {busy ? "typing…" : "AI assistant · usually replies instantly"}
+            {busy ? "typing…" : "AI assistant"}
           </p>
         </div>
         <div role="group" aria-label="Language" className="flex rounded-full border p-0.5 text-xs">
@@ -294,7 +294,7 @@ export function ChatSimulator({
                       width={540}
                       height={720}
                       unoptimized
-                      className="h-auto max-h-96 w-64 object-cover object-top outline outline-1 -outline-offset-1 outline-black/10 dark:outline-white/10"
+                      className="h-auto max-h-96 min-h-40 w-64 bg-muted object-cover object-top outline outline-1 -outline-offset-1 outline-black/10 dark:outline-white/10"
                     />
                     {b.message.caption && <p className="px-3 py-2 text-xs text-muted-foreground">{b.message.caption}</p>}
                   </a>

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { NavHeader } from "@/components/nav-header";
+import { BRAND } from "@/lib/brand";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -14,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "SmartCall AI",
-  description: "Skip the menu. Just tell us what's wrong.",
+  title: `${BRAND.name} · WhatsApp ordering for restaurants`,
+  description: BRAND.description,
 };
 
 export default function RootLayout({

@@ -1,24 +1,24 @@
-import { AudioLines, BrainCircuit, PhoneIncoming } from "lucide-react";
+import { BellRing, MessageCircle, ScrollText } from "lucide-react";
 
 // Adapted from Tailark Mist features-2 (MIT, github.com/tailark/blocks).
 const STEPS = [
   {
-    icon: PhoneIncoming,
-    title: "The caller just talks",
-    text: "They dial your local number and describe the problem however they like. No keypad, no menu tree.",
-    detail: "“I was charged twice this month.”",
+    icon: ScrollText,
+    title: "Add your menu",
+    text: "Items and prices in shillings, with Luganda names and the words your customers use. Or start from a sample Kampala menu and edit it.",
+    detail: "Chicken Luwombo · Luwombo w'enkoko · UGX 25,000",
   },
   {
-    icon: BrainCircuit,
-    title: "The AI understands and acts",
-    text: "Each reply is transcribed, then an AI agent built on the Vercel AI SDK checks your help content and decides what to do.",
-    detail: "searchHelp → openServiceRequest",
+    icon: MessageCircle,
+    title: "Connect WhatsApp",
+    text: "Link a WhatsApp Business number for your restaurant. Customers message it like any other chat, with nothing to download.",
+    detail: "+256 7•• ••• 214 · connected",
   },
   {
-    icon: AudioLines,
-    title: "Solved, or handed off",
-    text: "The caller hears the answer or their reference number. If a person is needed, the call goes to the right agent.",
-    detail: "Resolved · SC-FQ34C",
+    icon: BellRing,
+    title: "Orders arrive",
+    text: "The assistant shows the customer their order and total to confirm, then it appears on your board with a chime.",
+    detail: "EM-7F3K2 · new order · UGX 17,000",
   },
 ];
 
@@ -26,9 +26,9 @@ export function HowItWorks() {
   return (
     <section id="how-it-works" className="scroll-mt-20 bg-muted/50 py-20 md:py-24">
       <div className="mx-auto max-w-5xl px-6">
-        <h2 className="text-3xl font-semibold tracking-tight md:text-4xl">How a call works</h2>
+        <h2 className="text-3xl font-semibold tracking-tight md:text-4xl">Set up in an afternoon</h2>
         <p className="mt-4 max-w-2xl text-lg text-pretty text-muted-foreground">
-          Every turn of the conversation is a normal web request to the app, so it runs entirely on Next.js with no separate voice server.
+          No new hardware and no training for your staff. If you can use WhatsApp, you can run this.
         </p>
 
         <ol className="mt-12 grid gap-8 sm:grid-cols-2 md:grid-cols-3">

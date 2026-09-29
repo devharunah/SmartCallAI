@@ -175,11 +175,12 @@ insert into storage.buckets (id, name, public) values ('menus', 'menus', true)
   on conflict (id) do nothing;
 
 -- Demo restaurant used by the public /try simulator. No owner until claimed.
+-- Open around the clock (open == close) so the demo works at any hour.
 with r as (
   insert into restaurants (name, slug, default_language, hours, delivery, greeting)
   values (
     'Mama Rose Kitchen', 'mama-rose-kitchen', 'lug',
-    '{"open": "07:00", "close": "22:30"}',
+    '{"open": "00:00", "close": "00:00"}',
     '{"pickup": true, "delivery": true, "fee": 3000, "areas": ["Kololo", "Nakasero", "Kamwokya", "Ntinda", "Bukoto", "Wandegeya", "Kisementi"]}',
     null
   )

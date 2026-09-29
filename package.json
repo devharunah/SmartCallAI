@@ -11,8 +11,10 @@
   "dependencies": {
     "@ai-sdk/google": "^4.0.85",
     "@ai-sdk/openai": "^4.0.75",
+    "@dagrejs/dagre": "^3.1.1",
     "@supabase/ssr": "^0.12.4",
     "@supabase/supabase-js": "^2.110.8",
+    "@xyflow/react": "^12.12.0",
     "ai": "^7.0.114",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

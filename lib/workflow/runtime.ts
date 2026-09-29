@@ -92,6 +92,10 @@ export async function runWorkflow(input: RuntimeInput): Promise<RuntimeResult> {
     return true;
   };
 
+  // Resuming at an AI stage: rule-based exits are checked before the AI runs, so
+  // e.g. a chat parked at "Closed hours" moves on once the restaurant opens.
+  if (!justEntered && node.type === "agent") moveTo(follow(["expr"]));
+
   let hops = 0;
   for (; hops < MAX_HOPS; hops++) {
     trace.push(node.id);

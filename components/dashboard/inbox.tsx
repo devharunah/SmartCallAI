@@ -5,7 +5,7 @@ import Image from "next/image";
 import { Bot, Hand, Mic, Send } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { createClient } from "@/lib/supabase/client";
+import { createRealtimeClient } from "@/lib/supabase/client";
 import { toConversation, type ConversationRow } from "@/lib/chat/conversation-row";
 import type { Conversation, DisplayEntry } from "@/lib/chat/types";
 import { cn } from "@/lib/utils";
@@ -80,17 +80,24 @@ export function Inbox({ restaurantId, initial, selectedId }: { restaurantId: str
   }, []);
 
   useEffect(() => {
-    const db = createClient();
-    const channel = db
-      .channel(`conversations:${restaurantId}`)
-      .on("postgres_changes", { event: "*", schema: "public", table: "conversations", filter: `restaurant_id=eq.${restaurantId}` }, (payload) => {
-        if (payload.eventType === "DELETE") return;
-        const c = toConversation(payload.new as ConversationRow);
-        setConversations((list) => [c, ...list.filter((x) => x.id !== c.id)].sort((a, b) => b.updatedAt.localeCompare(a.updatedAt)));
-      })
-      .subscribe();
+    let cancelled = false;
+    let cleanup = () => {};
+    void (async () => {
+      const db = await createRealtimeClient();
+      if (cancelled) return;
+      const channel = db
+        .channel(`conversations:${restaurantId}`)
+        .on("postgres_changes", { event: "*", schema: "public", table: "conversations", filter: `restaurant_id=eq.${restaurantId}` }, (payload) => {
+          if (payload.eventType === "DELETE") return;
+          const c = toConversation(payload.new as ConversationRow);
+          setConversations((list) => [c, ...list.filter((x) => x.id !== c.id)].sort((a, b) => b.updatedAt.localeCompare(a.updatedAt)));
+        })
+        .subscribe();
+      cleanup = () => void db.removeChannel(channel);
+    })();
     return () => {
-      void db.removeChannel(channel);
+      cancelled = true;
+      cleanup();
     };
   }, [restaurantId]);
 

@@ -35,7 +35,7 @@ export async function handleInbound({
   customerName: string | null;
   inbound: Inbound;
 }): Promise<EngineResult> {
-  const conversation = await getOrStartConversation({
+  const started = await getOrStartConversation({
     restaurantId: restaurant.id,
     channel,
     customerId,
@@ -43,6 +43,29 @@ export async function handleInbound({
     language: restaurant.defaultLanguage,
   });
 
+  // One message at a time per customer; re-read the state once we hold the lock.
+  const locked = await lockConversation(started.id);
+  try {
+    const conversation = (locked && (await getConversation(started.id))) || started;
+    return await handleTurn({ restaurant, channel, customerName, inbound, conversation });
+  } finally {
+    if (locked) await unlockConversation(started.id);
+  }
+}
+
+async function handleTurn({
+  restaurant,
+  channel,
+  customerName,
+  inbound,
+  conversation,
+}: {
+  restaurant: Restaurant;
+  channel: Conversation["channel"];
+  customerName: string | null;
+  inbound: Inbound;
+  conversation: Conversation;
+}): Promise<EngineResult> {
   const now = new Date().toISOString();
   const language = (inbound.kind !== "button" && detectLanguage(inbound.text)) || conversation.language;
   const convo: Conversation = { ...conversation, language, customerName: customerName ?? conversation.customerName };
@@ -102,7 +125,7 @@ export async function handleInbound({
     return { out, conversation: convo, orderReference: null, handoff: false };
   }
 
-  console.log(`[chat/engine] ${restaurant.slug} ${channel}:${customerId.slice(-6)} ${result.trace.join(" → ")}`);
+  console.log(`[chat/engine] ${restaurant.slug} ${channel}:${conversation.customerId.slice(-6)} ${result.trace.join(" → ")}`);
   out.push(...result.out);
   await persist(
     convo,
@@ -119,6 +142,29 @@ export async function handleInbound({
     [{ role: "user", content: inbound.kind === "voice" ? `[voice note] ${inbound.text}` : inbound.text }, ...result.newMessages]
   );
   return { out, conversation: convo, orderReference: result.orderReference, handoff: Boolean(result.handoff) };
+}
+
+const LOCK_WAIT_MS = 25_000;
+
+/** Wait for this customer's previous message to finish. Gives up (and relies on the merge in persist) after 25s. */
+async function lockConversation(id: string): Promise<boolean> {
+  const deadline = Date.now() + LOCK_WAIT_MS;
+  while (Date.now() < deadline) {
+    const { data, error } = await supabase.rpc("lock_conversation", { conversation_id: id });
+    if (error) {
+      console.error("[chat/engine] lock failed", error);
+      return false;
+    }
+    if (data === true) return true;
+    await new Promise((r) => setTimeout(r, 400));
+  }
+  console.warn("[chat/engine] lock wait timed out", id);
+  return false;
+}
+
+async function unlockConversation(id: string) {
+  const { error } = await supabase.from("conversations").update({ locked_until: null }).eq("id", id);
+  if (error) console.error("[chat/engine] unlock failed", error);
 }
 
 /**

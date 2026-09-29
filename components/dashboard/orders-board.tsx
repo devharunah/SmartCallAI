@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Bell, BellOff, Bike, MessageSquare, ShoppingBag } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { createClient } from "@/lib/supabase/client";
+import { createRealtimeClient } from "@/lib/supabase/client";
 import { formatUgx, ORDER_COLUMNS, toOrder } from "@/lib/restaurants/data";
 import type { Order, OrderStatus } from "@/lib/restaurants/types";
 import { cn } from "@/lib/utils";
@@ -76,7 +76,11 @@ export function OrdersBoard({ restaurantId, initialOrders }: { restaurantId: str
   }, []);
 
   useEffect(() => {
-    const db = createClient();
+    let cancelled = false;
+    let cleanup = () => {};
+    void (async () => {
+    const db = await createRealtimeClient();
+    if (cancelled) return;
     const loadOne = async (id: string) => {
       // order_items are inserted right after the order row, so give them a moment.
       await new Promise((r) => setTimeout(r, 600));
@@ -107,8 +111,11 @@ export function OrdersBoard({ restaurantId, initialOrders }: { restaurantId: str
         }
       })
       .subscribe((status) => setLive(status === "SUBSCRIBED" ? "live" : status === "CLOSED" || status === "CHANNEL_ERROR" ? "offline" : "connecting"));
+    cleanup = () => void db.removeChannel(channel);
+    })();
     return () => {
-      void db.removeChannel(channel);
+      cancelled = true;
+      cleanup();
     };
   }, [restaurantId]);
 

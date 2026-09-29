@@ -21,7 +21,7 @@ export async function GET(_request: Request, { params }: { params: Promise<{ slu
     .map((c) => ({ ...c, items: menu.items.filter((i) => (i.categoryId ?? "") === c.id) }))
     .filter((c) => c.items.length > 0);
   const rows = sections.reduce((n, s) => n + s.items.length + 2, 0);
-  const height = Math.min(4000, 300 + rows * 58);
+  const height = Math.min(4000, 250 + rows * 54);
 
   return new ImageResponse(
     (
@@ -43,7 +43,7 @@ export async function GET(_request: Request, { params }: { params: Promise<{ slu
               <div key={i.id} style={{ display: "flex", alignItems: "baseline", marginTop: 16, fontSize: 28, opacity: i.available ? 1 : 0.45 }}>
                 <span style={{ display: "flex" }}>{i.name}</span>
                 {i.nameLg ? <span style={{ fontSize: 20, color: "#8a7f73", marginLeft: 12 }}>{i.nameLg}</span> : null}
-                <span style={{ flexGrow: 1, borderBottom: "2px dotted #c9bfb2", margin: "0 14px", height: 1 }} />
+                <span style={{ flexGrow: 1, borderBottom: "1px solid #ddd3c6", margin: "0 14px", height: 1 }} />
                 <span style={{ fontWeight: 700 }}>{i.available ? formatUgx(i.price) : "Sold out"}</span>
               </div>
             ))}

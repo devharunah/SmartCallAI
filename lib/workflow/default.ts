@@ -22,7 +22,7 @@ export const DEFAULT_WORKFLOW: WorkflowGraph = {
       title: "Closed hours",
       data: {
         prompt:
-          "The restaurant is closed right now. Say so kindly, give today's opening hours from checkHours, and offer to show the menu so they can order when it opens. Do not take orders.",
+          "The restaurant is closed right now. Say so kindly in one or two sentences and give the opening hours from checkHours. If they ask for the menu, call sendMenu. Do not take orders.",
         tools: ["checkHours", "searchMenu", "sendMenu"],
       },
     },
@@ -81,6 +81,7 @@ export const DEFAULT_WORKFLOW: WorkflowGraph = {
   edges: [
     { id: "e-start-closed", source: "start", target: "closed", kind: "expr", condition: "isOpen == false" },
     { id: "e-start-greeting", source: "start", target: "greeting", kind: "always" },
+    { id: "e-closed-open", source: "closed", target: "greeting", kind: "expr", condition: "isOpen == true" },
     { id: "e-greeting-menu", source: "greeting", target: "send_menu", kind: "llm", condition: "The customer wants to see the menu or asks what food is available" },
     { id: "e-greeting-order", source: "greeting", target: "take_order", kind: "llm", condition: "The customer names food or drinks they want to order" },
     { id: "e-greeting-faq", source: "greeting", target: "faq", kind: "llm", condition: "The customer asks about location, hours, delivery or payment" },
