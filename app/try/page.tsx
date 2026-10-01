@@ -14,8 +14,8 @@ export default function TryPage() {
   return (
     <div className="mx-auto grid max-w-5xl gap-8 px-4 py-10 sm:px-6 lg:grid-cols-[1fr_420px] lg:items-start lg:py-14">
       <div className="lg:pt-10">
-        <p className="font-mono text-xs tracking-widest text-muted-foreground uppercase">Live demo</p>
-        <h1 className="mt-3 text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
+        <p className="text-xs font-semibold tracking-[0.08em] text-muted-foreground uppercase">Live demo</p>
+        <h1 className="mt-3 font-heading text-4xl leading-[1.1] text-balance sm:text-5xl">
           Order from Mama Rose Kitchen, like a customer would on WhatsApp.
         </h1>
         <p className="mt-4 max-w-prose text-pretty text-muted-foreground">

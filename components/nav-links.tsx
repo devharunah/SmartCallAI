@@ -9,28 +9,32 @@ import { cn } from "@/lib/utils";
 // The old voice routes (/call, /admin, /analytics) still work but aren't linked.
 const LINKS = [
   { href: "/try", label: "Demo" },
+  { href: "/#how-it-works", label: "How it works" },
+  { href: "/#faq", label: "FAQ" },
   { href: "/dashboard", label: "Dashboard" },
 ];
 
-export function NavLinks() {
+export function NavLinks({ className }: { className?: string }) {
   const pathname = usePathname();
 
   return (
-    <nav className="flex items-center gap-1 rounded-full border border-border bg-background p-1">
-      {LINKS.map((link) => (
-        <Link
-          key={link.href}
-          href={link.href}
-          className={cn(
-            "rounded-full px-2.5 py-1.5 text-sm font-medium transition-colors sm:px-3.5",
-            pathname === link.href || pathname.startsWith(`${link.href}/`)
-              ? "bg-primary text-primary-foreground"
-              : "text-muted-foreground hover:text-foreground"
-          )}
-        >
-          {link.label}
-        </Link>
-      ))}
+    <nav aria-label="Main" className={cn("items-center gap-1", className)}>
+      {LINKS.map((link) => {
+        const active = !link.href.includes("#") && (pathname === link.href || pathname.startsWith(`${link.href}/`));
+        return (
+          <Link
+            key={link.href}
+            href={link.href}
+            aria-current={active ? "page" : undefined}
+            className={cn(
+              "rounded-full px-3 py-2 text-[15px] font-medium transition-colors duration-150 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
+              active ? "text-foreground" : "text-muted-foreground hover:text-foreground"
+            )}
+          >
+            {link.label}
+          </Link>
+        );
+      })}
     </nav>
   );
 }

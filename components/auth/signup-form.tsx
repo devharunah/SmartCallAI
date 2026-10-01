@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useActionState } from "react";
 import { signup, type AuthState } from "@/app/auth/actions";
-import { AuthCard } from "@/components/auth/auth-card";
+import { AUTH_INPUT, AuthCard } from "@/components/auth/auth-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -37,7 +37,7 @@ export function SignupForm() {
   return (
     <AuthCard
       title="Create an account"
-      description="You need an account to reach the Admin and Analytics dashboards."
+      description="Set up your restaurant and start taking orders on WhatsApp."
       footer={
         <>
           Already have an account?{" "}
@@ -51,6 +51,7 @@ export function SignupForm() {
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="email">Email</Label>
           <Input
+            className={AUTH_INPUT}
             id="email"
             name="email"
             type="email"
@@ -62,6 +63,7 @@ export function SignupForm() {
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="password">Password</Label>
           <Input
+            className={AUTH_INPUT}
             id="password"
             name="password"
             type="password"
@@ -72,7 +74,7 @@ export function SignupForm() {
           />
         </div>
         {state.error && <p className="text-sm text-destructive">{state.error}</p>}
-        <Button type="submit" variant="accent" disabled={pending}>
+        <Button type="submit" size="lg" disabled={pending}>
           {pending ? "Creating account..." : "Create account"}
         </Button>
       </form>

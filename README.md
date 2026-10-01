@@ -1,8 +1,8 @@
-# Emmere
+# Order AI
 
 **Your restaurant on WhatsApp, taking orders in Luganda and English.**
 
-Emmere (Luganda for "food") is an AI assistant for restaurants in Uganda. Customers message the restaurant's WhatsApp by text or voice note. The assistant sends the menu as a picture, takes the order, shows the customer the total to confirm, and puts the order on the restaurant's live board. Owners see and edit how the assistant behaves as a workflow diagram.
+Order AI is an AI assistant for restaurants in Uganda. Customers message the restaurant's WhatsApp by text or voice note. The assistant sends the menu as a picture, takes the order, shows the customer the total to confirm, and puts the order on the restaurant's live board. Owners see and edit how the assistant behaves as a workflow diagram.
 
 > The name is a placeholder that lives in `lib/brand.ts`. Change it there to rename the product.
 

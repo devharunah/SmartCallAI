@@ -1,6 +1,6 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Eyebrow } from "./features";
 
-// Adapted from Tailark Mist faqs-2 (MIT, github.com/tailark/blocks).
 const FAQS = [
   {
     q: "What does it cost to run?",
@@ -34,20 +34,21 @@ const FAQS = [
 
 export function FAQs() {
   return (
-    <section id="faq" className="scroll-mt-20 py-20 md:py-24">
-      <div className="mx-auto max-w-5xl px-6">
-        <div className="grid gap-8 md:grid-cols-5 md:gap-12">
+    <section id="faq" className="scroll-mt-20 py-16 md:py-24">
+      <div className="mx-auto max-w-300 px-4 sm:px-6">
+        <div className="grid gap-10 md:grid-cols-5 md:gap-16">
           <div className="md:col-span-2">
-            <h2 className="text-3xl font-semibold tracking-tight md:text-4xl">Questions</h2>
-            <p className="mt-4 text-lg text-balance text-muted-foreground">What restaurant owners usually ask first.</p>
+            <Eyebrow>FAQ</Eyebrow>
+            <h2 className="mt-4 font-heading text-4xl leading-[1.1] md:text-5xl">Questions</h2>
+            <p className="mt-5 text-lg text-balance text-body">What restaurant owners usually ask first.</p>
           </div>
           <div className="md:col-span-3">
-            <Accordion type="single" collapsible>
+            <Accordion type="single" collapsible className="border-y border-border">
               {FAQS.map((item, i) => (
-                <AccordionItem key={item.q} value={`item-${i}`}>
-                  <AccordionTrigger className="cursor-pointer text-base hover:no-underline">{item.q}</AccordionTrigger>
+                <AccordionItem key={item.q} value={`item-${i}`} className="border-border">
+                  <AccordionTrigger className="cursor-pointer py-5 text-[17px] font-medium hover:no-underline">{item.q}</AccordionTrigger>
                   <AccordionContent>
-                    <p className="text-base text-pretty text-muted-foreground">{item.a}</p>
+                    <p className="pb-2 text-base text-pretty text-body">{item.a}</p>
                   </AccordionContent>
                 </AccordionItem>
               ))}

@@ -7,9 +7,20 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-inter);
   --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-geist-sans);
+  --font-heading: var(--font-newsreader);
+  --color-body: var(--body);
+  --color-success: var(--success);
+  --color-canvas-soft: var(--canvas-soft);
+  --color-surface-strong: var(--surface-strong);
+  --color-surface-dark: var(--surface-dark);
+  --color-surface-dark-elevated: var(--surface-dark-elevated);
+  --color-orb-mint: var(--orb-mint);
+  --color-orb-peach: var(--orb-peach);
+  --color-orb-lavender: var(--orb-lavender);
+  --color-orb-sky: var(--orb-sky);
+  --color-orb-rose: var(--orb-rose);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -48,73 +59,95 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+/*
+ * Order AI tokens, after the ElevenLabs marketing system: off-white canvas,
+ * warm near-black ink, light serif display, ink pill CTAs. Colour only comes
+ * from the pastel orbs, which are decoration and never a fill for controls.
+ */
 :root {
-  --background: #ffffff;
-  --foreground: #0a0a0a;
+  --background: #f5f5f5;
+  --foreground: #0c0a09;
   --card: #ffffff;
-  --card-foreground: #0a0a0a;
+  --card-foreground: #0c0a09;
   --popover: #ffffff;
-  --popover-foreground: #0a0a0a;
-  --primary: #0a0a0a;
+  --popover-foreground: #0c0a09;
+  --primary: #292524;
   --primary-foreground: #ffffff;
-  --secondary: #f7f7f7;
-  --secondary-foreground: #0a0a0a;
-  --muted: #f7f7f7;
-  --muted-foreground: #5a5a5c;
-  --accent: #00d4a4;
-  --accent-foreground: #0a0a0a;
-  --destructive: #d45656;
-  --border: #e5e5e5;
-  --input: #e5e5e5;
-  --ring: #00d4a4;
-  --chart-1: #00d4a4;
-  --chart-2: #3772cf;
-  --chart-3: #f55a3c;
-  --chart-4: #c37d0d;
-  --chart-5: #888888;
+  --secondary: #f0efed;
+  --secondary-foreground: #0c0a09;
+  --muted: #f0efed;
+  --muted-foreground: #777169;
+  --body: #4e4e4e;
+  --accent: #a7e5d3;
+  --accent-foreground: #0c0a09;
+  --success: #16a34a;
+  --destructive: #dc2626;
+  --border: #e7e5e4;
+  --input: #d6d3d1;
+  --ring: #292524;
+  --canvas-soft: #fafafa;
+  --surface-strong: #f0efed;
+  --surface-dark: #0c0a09;
+  --surface-dark-elevated: #1c1917;
+  --orb-mint: #a7e5d3;
+  --orb-peach: #f4c5a8;
+  --orb-lavender: #c8b8e0;
+  --orb-sky: #a8c8e8;
+  --orb-rose: #e8b8c4;
+  --chart-1: #292524;
+  --chart-2: #7fc9b4;
+  --chart-3: #e59f78;
+  --chart-4: #9a88bd;
+  --chart-5: #a8a29e;
   --radius: 0.75rem;
   --sidebar: #fafafa;
-  --sidebar-foreground: #0a0a0a;
-  --sidebar-primary: #0a0a0a;
+  --sidebar-foreground: #0c0a09;
+  --sidebar-primary: #292524;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #f7f7f7;
-  --sidebar-accent-foreground: #0a0a0a;
-  --sidebar-border: #e5e5e5;
-  --sidebar-ring: #00d4a4;
+  --sidebar-accent: #f0efed;
+  --sidebar-accent-foreground: #0c0a09;
+  --sidebar-border: #e7e5e4;
+  --sidebar-ring: #292524;
 }
 
 .dark {
-  --background: #0a0a0a;
+  --background: #0c0a09;
   --foreground: #ffffff;
-  --card: #1c1c1e;
+  --card: #1c1917;
   --card-foreground: #ffffff;
-  --popover: #1c1c1e;
+  --popover: #1c1917;
   --popover-foreground: #ffffff;
   --primary: #ffffff;
-  --primary-foreground: #0a0a0a;
-  --secondary: #1f1f1f;
+  --primary-foreground: #0c0a09;
+  --secondary: #292524;
   --secondary-foreground: #ffffff;
-  --muted: #1f1f1f;
-  --muted-foreground: #b3b3b3;
-  --accent: #00d4a4;
-  --accent-foreground: #0a0a0a;
-  --destructive: #d45656;
+  --muted: #292524;
+  --muted-foreground: #a8a29e;
+  --body: #d6d3d1;
+  --accent: #a7e5d3;
+  --accent-foreground: #0c0a09;
+  --success: #4ade80;
+  --destructive: #f87171;
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
-  --ring: #00d4a4;
-  --chart-1: #00d4a4;
-  --chart-2: #3772cf;
-  --chart-3: #f55a3c;
-  --chart-4: #c37d0d;
-  --chart-5: #888888;
-  --sidebar: #1c1c1e;
+  --ring: #ffffff;
+  --canvas-soft: #1c1917;
+  --surface-strong: #292524;
+  --surface-dark: #000000;
+  --surface-dark-elevated: #1c1917;
+  --chart-1: #ffffff;
+  --chart-2: #a7e5d3;
+  --chart-3: #f4c5a8;
+  --chart-4: #c8b8e0;
+  --chart-5: #78716c;
+  --sidebar: #1c1917;
   --sidebar-foreground: #ffffff;
   --sidebar-primary: #ffffff;
-  --sidebar-primary-foreground: #0a0a0a;
-  --sidebar-accent: #1f1f1f;
+  --sidebar-primary-foreground: #0c0a09;
+  --sidebar-accent: #292524;
   --sidebar-accent-foreground: #ffffff;
   --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: #00d4a4;
+  --sidebar-ring: #ffffff;
 }
 
 @layer base {
@@ -127,4 +160,36 @@
   html {
     @apply font-sans;
   }
+}
+
+@layer base {
+  body {
+    letter-spacing: 0.01em;
+  }
+  /* Display copy is a light serif with tight tracking, never bold. */
+  .font-heading {
+    font-weight: 300;
+    letter-spacing: -0.02em;
+  }
+}
+
+/*
+ * Atmospheric orb: a soft blurred bloom placed behind copy. Pair with a
+ * bg-orb-* colour, a size and a position; it never holds content.
+ */
+@utility orb {
+  position: absolute;
+  pointer-events: none;
+  border-radius: 9999px;
+  filter: blur(64px);
+  opacity: 0.85;
+}
+
+@keyframes orb-drift {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(3%, -4%, 0) scale(1.06); }
+}
+
+@utility animate-orb {
+  animation: orb-drift 18s ease-in-out infinite;
 }

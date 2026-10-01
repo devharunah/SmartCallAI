@@ -13,8 +13,9 @@ real app with the `run-smartcallai` driver screenshots.
 
 ## This project's system (use it, don't reinvent it)
 
-- **Tokens:** `app/globals.css`. Near-black primary `#0a0a0a`, white surfaces, `--muted #f7f7f7`, `--border #e5e5e5`, **accent `#00d4a4`** (also the focus ring), destructive `#d45656`, `--radius 0.75rem` with sm/md/lg/xl derived from it. Mintlify-inspired: quiet, high-contrast, generous whitespace.
-- **Type:** Geist Sans / Geist Mono (`--font-sans`, `--font-mono`).
+- **Tokens:** `app/globals.css`, after the ElevenLabs marketing system (`docs/design/elevenlabs-reference.md`). Off-white canvas `#f5f5f5`, white cards, warm ink `#0c0a09`, primary `#292524` (the only CTA colour, as a pill), `--body #4e4e4e` for running text, `--muted-foreground #777169`, hairline `--border #e7e5e4`, `--input #d6d3d1`, ring = ink. `--accent` is mint `#a7e5d3`, for fills only (chat bubbles, highlights), never a button. `--success #16a34a`, `--destructive #dc2626`.
+- **Orbs:** `orb` utility + `bg-orb-mint|peach|lavender|sky|rose` (+ `motion-safe:animate-orb`). Atmosphere on marketing surfaces (landing, auth) only: never a button fill, a text colour or behind dense UI.
+- **Type:** Inter for body (`font-sans`), Newsreader light for display (`font-heading`, weight 300, tight tracking, never bold), Geist Mono for codes.
 - **Components:** `components/ui/*` (button, card, badge, input, label, switch, table). Extend these with variants before writing new primitives.
 - **Styling:** Tailwind v4 utilities referencing the tokens (`bg-muted`, `text-muted-foreground`, `ring-ring`). Never hard-code hex values in components.
 
@@ -54,7 +55,7 @@ scannable. Caller-facing screens get one primary action at a time.
 
 ## Anti-patterns
 
-- Purple gradients, decorative blobs, stock "AI" imagery, vague hero copy.
+- Saturated gradients, orbs on product screens, stock "AI" imagery, vague hero copy.
 - Cards inside cards. Oversized cards with one line of text.
 - Describing features in the UI when the controls speak for themselves.
 - New dependencies for flourishes (a whole animation lib for one fade).

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useActionState } from "react";
 import { login, type AuthState } from "@/app/auth/actions";
-import { AuthCard } from "@/components/auth/auth-card";
+import { AUTH_INPUT, AuthCard } from "@/components/auth/auth-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -23,7 +23,7 @@ export function LoginForm({
   return (
     <AuthCard
       title="Sign in"
-      description="Sign in to reach the Admin and Analytics dashboards."
+      description="Sign in to see your orders, chats and menu."
       footer={
         <>
           No account?{" "}
@@ -38,6 +38,7 @@ export function LoginForm({
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="email">Email</Label>
           <Input
+            className={AUTH_INPUT}
             id="email"
             name="email"
             type="email"
@@ -49,6 +50,7 @@ export function LoginForm({
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="password">Password</Label>
           <Input
+            className={AUTH_INPUT}
             id="password"
             name="password"
             type="password"
@@ -58,7 +60,7 @@ export function LoginForm({
           />
         </div>
         {error && <p className="text-sm text-destructive">{error}</p>}
-        <Button type="submit" variant="accent" disabled={pending}>
+        <Button type="submit" size="lg" disabled={pending}>
           {pending ? "Signing in..." : "Sign in"}
         </Button>
       </form>
