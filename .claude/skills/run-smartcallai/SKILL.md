@@ -218,3 +218,14 @@ npx next build
 - **`ERROR stage: Something went wrong reaching the routing service`**: check `$TEMP/smartcallai-dev.log`. `ENOTFOUND …supabase.co` means the server is using the hosted env. Restart it with `dev-local.sh`, not `npm run dev`.
 - **`FATAL: An unexpected Turbopack error` / `… node_modules/smartcallai' is a symlink … infinite loop`** (every route returns 500): this is the `--prefix` gotcha above. Run `rm .claude/skills/run-smartcallai/node_modules/smartcallai`, then restore `package.json` and `package-lock.json` in that directory from git and rerun `npm ci` there.
 - **`local supabase not running`** from `dev-local.sh`: run `podman machine start`, then the `supabase start` line from Setup.
+
+## Emmere (WhatsApp restaurant ordering) end-to-end
+
+Needs migrations 0003+ on the local stack, started with Realtime and Storage (drop `realtime,storage-api` from the `-x` list), then `npx -y supabase@2.117.0 migration up --local`.
+
+```bash
+PORT=3200 bash .claude/skills/run-smartcallai/dev-local.sh
+BASE_URL=http://localhost:3200 node .claude/skills/run-smartcallai/emmere.mjs
+```
+
+It drives the landing page, a `/try` order, sign-up, onboarding, every dashboard tab, and a test order from the Workflow tab that must appear live on the orders board. Screenshots go to `$TEMP/emmere-shots/`.

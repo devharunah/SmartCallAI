@@ -1,11 +1,20 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist_Mono, Inter, Newsreader } from "next/font/google";
 import { NavHeader } from "@/components/nav-header";
+import { BRAND } from "@/lib/brand";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
+});
+
+// Stand-in for ElevenLabs' licensed Waldenburg: a light editorial serif for display copy only.
+const newsreader = Newsreader({
+  variable: "--font-newsreader",
+  subsets: ["latin"],
+  weight: ["300", "400"],
+  style: ["normal", "italic"],
 });
 
 const geistMono = Geist_Mono({
@@ -14,8 +23,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "SmartCall AI",
-  description: "Skip the menu. Just tell us what's wrong.",
+  title: `${BRAND.name} · WhatsApp ordering for restaurants`,
+  description: BRAND.description,
 };
 
 export default function RootLayout({
@@ -26,7 +35,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${inter.variable} ${newsreader.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <NavHeader />

@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+import { MARK_BUBBLE, MARK_LINES } from "@/components/brand-mark";
 
 export const size = { width: 180, height: 180 };
 export const contentType = "image/png";
@@ -13,14 +14,14 @@ export default function AppleIcon() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "#0a0a0a",
+          background: "#292524",
         }}
       >
-        <svg width="104" height="104" viewBox="0 0 24 24" fill="none">
-          <path
-            d="M6.6 10.8c1.2 2.4 3.2 4.4 5.6 5.6l1.9-1.9a1 1 0 0 1 1-.25 8 8 0 0 0 2.5.4 1 1 0 0 1 1 1V19a1 1 0 0 1-1 1A15 15 0 0 1 3 6a1 1 0 0 1 1-1h3.4a1 1 0 0 1 1 1 8 8 0 0 0 .4 2.5 1 1 0 0 1-.25 1z"
-            fill="#00d4a4"
-          />
+        <svg width="112" height="112" viewBox="0 0 24 24" fill="none">
+          <path d={MARK_BUBBLE} fill="#ffffff" />
+          {MARK_LINES.map((d) => (
+            <path key={d} d={d} stroke="#292524" strokeWidth="1.4" strokeLinecap="round" />
+          ))}
         </svg>
       </div>
     ),
