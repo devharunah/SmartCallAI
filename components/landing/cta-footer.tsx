@@ -15,7 +15,7 @@ export function CallToAction() {
         <div className="relative">
           <h2 className="mx-auto max-w-2xl font-heading text-4xl leading-[1.1] text-balance md:text-[3.25rem]">Order a rolex from the demo</h2>
           <p className="mx-auto mt-5 max-w-md text-lg text-pretty text-body">
-            Message Mama Rose Kitchen by text or voice note, in Luganda or English, and watch the order go through.
+            Message Mama Rose Kitchen by text or voice note and watch the order go through.
           </p>
           <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Button asChild size="lg" className="w-full sm:w-auto">

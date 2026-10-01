@@ -32,10 +32,10 @@ export function AuthCard({
         <div className="orb top-1/2 left-1/3 size-64 bg-orb-lavender opacity-60" />
         <div className="relative flex h-full flex-col justify-end gap-4 p-10">
           <div className="max-w-[80%] self-end rounded-2xl rounded-br-md bg-accent/60 px-4 py-3 text-sm backdrop-blur-sm">
-            Mpa menu
+            Hi, can I see the menu?
           </div>
           <div className="max-w-[80%] rounded-2xl rounded-bl-md bg-card/90 px-4 py-3 text-sm ring-1 ring-border backdrop-blur-sm">
-            🛵 Order {BRAND.orderPrefix}-7F3K2 eri mu kkubo ejja gy&apos;oli!
+            🛵 Order {BRAND.orderPrefix}-7F3K2 is on its way to you!
           </div>
           <p className="mt-6 max-w-sm font-heading text-3xl leading-[1.15]">{BRAND.tagline}</p>
         </div>

@@ -1,6 +1,6 @@
 # Order AI
 
-**Your restaurant on WhatsApp, taking orders in Luganda and English.**
+**An AI that answers your restaurant's WhatsApp and takes the orders.**
 
 Order AI is an AI assistant for restaurants in Uganda. Customers message the restaurant's WhatsApp by text or voice note. The assistant sends the menu as a picture, takes the order, shows the customer the total to confirm, and puts the order on the restaurant's live board. Owners see and edit how the assistant behaves as a workflow diagram.
 

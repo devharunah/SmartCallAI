@@ -3,8 +3,8 @@ import { Eyebrow } from "./features";
 const STEPS = [
   {
     title: "Add your menu",
-    text: "Items and prices in shillings, with Luganda names and the words your customers use. Or start from a sample Kampala menu and edit it.",
-    detail: "Chicken Luwombo · Luwombo w'enkoko · UGX 25,000",
+    text: "Items and prices in shillings, with the names your customers actually use. Or start from a sample Kampala menu and edit it.",
+    detail: "Chicken Luwombo · UGX 25,000",
   },
   {
     title: "Connect WhatsApp",

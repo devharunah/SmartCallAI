@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 const FACTS = [
   { value: "0%", label: "Commission on your orders" },
   { value: "Seconds", label: "To answer every message, day and night" },
-  { value: "2 languages", label: "Luganda and English, typed or spoken" },
+  { value: "Text or voice", label: "Customers order however they like" },
 ];
 
 /** Three plain facts under the hero, separated by hairlines rather than boxed. */
@@ -27,7 +27,7 @@ export function Facts() {
 const BEFORE = [
   "Messages missed during the lunch rush",
   "Orders copied into a notebook by hand",
-  "“Mpa menu” answered forty times a day",
+  "“Menu please?” answered forty times a day",
   "Commission on every delivery-app order",
 ];
 
@@ -142,8 +142,8 @@ function MiniFlow() {
 
 const FEATURES = [
   {
-    title: "Understands Luganda voice notes",
-    text: "Customers order the way they'd message a friend. Texts and voice notes in Luganda or English are understood, and it replies in the same language.",
+    title: "Reads texts and voice notes",
+    text: "Customers order the way they'd message a friend. It understands what they want, asks about anything missing, and replies in their language.",
     visual: <Waveform />,
   },
   {

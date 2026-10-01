@@ -16,15 +16,15 @@ export function Hero() {
 
       <div className="relative mx-auto max-w-300 px-4 pt-16 pb-16 text-center sm:px-6 md:pt-24 md:pb-24">
         <p className="mx-auto w-fit rounded-full bg-card/70 px-3 py-1 text-xs font-semibold tracking-[0.08em] text-foreground uppercase ring-1 ring-border backdrop-blur-sm">
-          WhatsApp · Luganda &amp; English
+          AI ordering on WhatsApp
         </p>
 
         <h1 className="mx-auto mt-6 max-w-4xl font-heading text-[2.6rem] leading-[1.05] text-balance sm:text-6xl md:text-[4.5rem]">
           Your restaurant takes orders on WhatsApp, even while you cook.
         </h1>
         <p className="mx-auto mt-6 max-w-xl text-lg text-pretty text-body">
-          {BRAND.name} answers your WhatsApp in Luganda and English. It sends the menu, takes the order from a text or voice note, and puts it on
-          your kitchen board. No app for customers, no commission.
+          {BRAND.name} answers every message on your WhatsApp. It sends the menu, takes the order from a text or voice note, and puts it on your
+          kitchen board. No app for customers, no commission.
         </p>
 
         <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">

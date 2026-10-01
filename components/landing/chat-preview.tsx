@@ -1,25 +1,25 @@
 import { Mic } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-// The hero visual is the product: a customer ordering by voice note in
-// Luganda and the assistant confirming with prices from the menu. Wording
-// matches what the bot actually sends.
+// The hero visual is the product: a customer ordering by voice note and the
+// assistant confirming with prices from the menu. Wording matches what the
+// bot actually sends (lib/chat/language.ts). One "Webale" keeps it local.
 
 type Line =
   | { who: "customer"; voice?: string; text: string; at: string }
   | { who: "bot"; text: string; at: string; summary?: boolean };
 
 const LINES: Line[] = [
-  { who: "customer", voice: "0:06", text: "Oli otya, njagala rolex bbiri ne juice", at: "12:41" },
-  { who: "bot", text: "Kale! Nkusseeko Classic Rolex bbiri ne passion juice emu. Ojja kukima oba tukuleetere?", at: "12:41" },
-  { who: "customer", text: "Mundeetere e Ntinda, okumpi ne Capital Shoppers", at: "12:42" },
+  { who: "customer", voice: "0:05", text: "Hi! Can I get two rolex and a passion juice?", at: "12:41" },
+  { who: "bot", text: "Sure! Two Classic Rolex and one passion juice. Is this for pickup or delivery?", at: "12:41" },
+  { who: "customer", text: "Delivery please, Ntinda near Capital Shoppers. Webale!", at: "12:42" },
   { who: "bot", text: "", at: "12:42", summary: true },
 ];
 
 export const SUMMARY = [
   ["2 × Classic Rolex", "UGX 10,000"],
   ["1 × Fresh passion juice", "UGX 4,000"],
-  ["Okutuusa e Ntinda", "UGX 3,000"],
+  ["Delivery to Ntinda", "UGX 3,000"],
 ] as const;
 
 export const TOTAL = "UGX 17,000";
@@ -70,7 +70,7 @@ export function ChatPreview({ className }: { className?: string }) {
           ) : line.summary ? (
             <li key={i} className="flex flex-col items-start gap-2">
               <div className="w-full max-w-[86%] rounded-2xl rounded-bl-md bg-card px-3.5 py-3 ring-1 ring-border">
-                <p className="font-medium">Kakasa order yo:</p>
+                <p className="font-medium">Please confirm your order:</p>
                 <dl className="mt-2 space-y-1">
                   {SUMMARY.map(([k, v]) => (
                     <div key={k} className="flex justify-between gap-4">
@@ -79,14 +79,14 @@ export function ChatPreview({ className }: { className?: string }) {
                     </div>
                   ))}
                   <div className="flex justify-between gap-4 border-t border-border pt-1.5 font-medium">
-                    <dt>Omugatte</dt>
+                    <dt>Total</dt>
                     <dd className="whitespace-nowrap tabular-nums">{TOTAL}</dd>
                   </div>
                 </dl>
               </div>
               <div className="flex gap-1.5" aria-hidden>
-                <span className="rounded-full bg-card px-3 py-1 text-xs font-medium ring-1 ring-input">Yee, kakasa</span>
-                <span className="rounded-full bg-card px-3 py-1 text-xs font-medium ring-1 ring-input">Kyusa</span>
+                <span className="rounded-full bg-card px-3 py-1 text-xs font-medium ring-1 ring-input">Yes, place order</span>
+                <span className="rounded-full bg-card px-3 py-1 text-xs font-medium ring-1 ring-input">Change something</span>
               </div>
             </li>
           ) : (

@@ -7,10 +7,6 @@ const FAQS = [
     a: "WhatsApp gives each business number 1,000 free replies a month; after that each reply costs about UGX 15 (US$0.004). The AI costs a few shillings per conversation. There's no commission on your orders.",
   },
   {
-    q: "Does it really understand Luganda?",
-    a: "Yes, in texts and voice notes. Voice notes are transcribed with Sunbird AI's speech model, which was built in Uganda for Luganda. It replies in whichever language the customer uses. If a recording is noisy or unclear, it asks again, or hands the chat to your staff.",
-  },
-  {
     q: "Will it make up prices or dishes?",
     a: "No. It only offers what's on your menu, prices and totals come straight from your menu, and every order is shown to the customer to confirm before it reaches your kitchen.",
   },
@@ -21,6 +17,10 @@ const FAQS = [
   {
     q: "Do I need a new phone number?",
     a: "For now, yes. The assistant runs on a number connected to WhatsApp's Business Platform, and that number can't also be active in the regular WhatsApp app. Keeping your existing WhatsApp Business app number alongside it is coming later.",
+  },
+  {
+    q: "Which languages does it understand?",
+    a: "English and Luganda, typed or as voice notes, and it replies in whichever the customer uses. If a voice note is noisy or unclear, it asks again or hands the chat to your staff.",
   },
   {
     q: "Can customers pay with mobile money?",
